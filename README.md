@@ -8,10 +8,10 @@ Our system focuses on automating the billing process in a hospital setting. It a
 Features:
 
 💵 Billing & Invoicing
-Generate detailed bills with clear breakdowns of services, medications, and HMO discounts.
+- Generate detailed bills with clear breakdowns of services, medications, and HMO discounts.
 
 📊 Payment Tracking & History
-View pending, partial, and completed payments. Keep transaction history for reference.
+- View pending, partial, and completed payments. Keep transaction history for reference.
 
 📈 Revenue Reporting
-Analyze payment trends and revenue performance via integrated analytics tools.
+- Analyze payment trends and revenue performance via integrated analytics tools.
