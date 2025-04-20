@@ -11,7 +11,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/api/invoices', require('./routes/billingRoutes'));
+const patientRoutes = require('./routes/patientRoutes');
+
+
+app.use('/api', patientRoutes);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
