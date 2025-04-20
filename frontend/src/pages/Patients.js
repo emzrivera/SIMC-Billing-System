@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-function Invoices() {
+function Patients() {
   const [patients, setPatients] = useState([]);
 
   // Fetch patient data from the backend
   useEffect(() => {
-    fetch('http://localhost:5000/api/patients')
+    fetch('http://localhost:5000/api/')
       .then(response => response.json())
       .then(data => setPatients(data))
       .catch(error => console.error('Error fetching data:', error));
@@ -30,4 +30,4 @@ function Invoices() {
   );
 }
 
-export default Invoices;
+export default Patients;

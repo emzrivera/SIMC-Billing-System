@@ -1,13 +1,13 @@
 import { Routes, Route, BrowserRouter} from 'react-router-dom';
 
 //pages
-import Invoices from './pages/Patients';
+import Patients from './pages/Patients';
 
 function App() {
   return (
     <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Invoices />} />
+          <Route path="/" element={<Patients />} />
         </Routes>
     </BrowserRouter>
 
