@@ -9,7 +9,7 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(express.json());
-    
+
 const VALID_USERNAME = 'admin';
 const VALID_PASSWORD = 'adminpass';
 
@@ -29,9 +29,9 @@ const mockRoutes = require('./routes/mockRoutes');
 app.use('/api/mock', mockRoutes);
 
 app.get('/api', (req, res) => {
-  res.send('✅ API is working');
+  res.send('API is running...');
 });
 
 app.listen(5000, () => {
-  console.log('✅ Server running on http://localhost:5000');
+  console.log('Listening on port 5000');
 });
