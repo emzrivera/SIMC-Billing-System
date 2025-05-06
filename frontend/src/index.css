@@ -1,9 +1,23 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-  }
-  
-  h1 {
-    color: #333;
-  }
-  
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+:root {
+  --font-family: 'Inter', sans-serif;
+
+  --color-primary: #0077B6;
+  --color-secondary1: #0077B6;
+  --color-secondary2: #008FDA;
+  --color-accent: #E5F7FF;
+
+
+  --color-bg: #F4F6F8;
+  --color-text: #4C4C4C;
+  --color-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
