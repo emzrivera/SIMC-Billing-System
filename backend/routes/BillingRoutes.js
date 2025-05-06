@@ -3,7 +3,6 @@ const router = express.Router();
 const PatientRecord = require('../models/PatientRecordModel');
 const MedicineInventory = require('../models/MedicineInvModel');
 
-// Fetch ALL patients' billing data in one call
 router.get('/', async (req, res) => {
   try {
     const patients = await PatientRecord.find();
@@ -61,7 +60,6 @@ router.get('/', async (req, res) => {
     res.json(results);
   } catch (err) {
     console.error('Billing route error:', err);
-    res.status(500).json({ message: 'Server error' });
   }
 });
 
