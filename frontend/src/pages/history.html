@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment History | Billing</title>
+        <link rel="icon" href="/frontend/public/logo-cross.png">
+        <link rel="stylesheet" href="history.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>
+            <!-- Navigation / Header bar -->
+            <nav>
+                <div class="logo">
+                    <a href="#"><img src="/frontend/public/logo-combined.png" alt="SIMC Logo"></a>
+                </div>
+
+                <div class="right-side">
+                    <div class="date-time" id="date-time"></div>
+                    <div class="avatar">
+                    <a href="#"><img src="/frontend/public/Avatar.png" alt="Avatar"></a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="layout-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+            <ul class="nav-links">
+                <li class="Billing"><a href="#"><img src="/frontend/public/history-icon-1.png" alt="Billing Icon"> Patient Billing</a></li>
+                <li class="History"><a href="#"><img src="/frontend/public/history-icon-2.png" alt="History Icon"> Payment History</a></li>
+                <li class="Revenue"><a href="#"><img src="/frontend/public/history-icon-3.png" alt="Reports Icon"> Revenue Reports</a></li>
+            </ul>
+            </aside>
+        
+            <!-- Main content -->
+            <main class="main-content">
+                <div class="payment-summary">
+                    <div class="status paid">
+                        <p>Paid Payments</p>
+                        <p class="count-1">(99)</p> <br>
+                        <h2 class="amount">₱ 246,987.89</h2>
+                        <!-- change to legit data by linking it -->
+                    </div>
+                    <div class="status partial">
+                        <p>Partial Payments</p> 
+                        <p class="count-2">(56)</p> <br>
+                        <h2 class="amount">₱ 135,786.56</h2>
+                        <!-- change to legit data by linking it -->
+                    </div>
+                    <div class="status overdue">
+                        <p>Overdue Payments (8)<p> 
+                        <p class="count-3">(8)</p> <br>
+                        <h2 class="amount">₱ 76,678.12</h2>
+                        <!-- change to legit data by linking it -->
+                    </div>
+                </div>
+
+            <h1>Welcome</h1>
+            </main>
+        </div>
+
+
+    </body>
+</html>
+
+<!-- SCRIPT -->
+<script>
+   function updateDateTime() 
+   {
+        const now = new Date();
+        const dateString = now.toLocaleDateString('en-US', {
+            weekday: 'long',
+            /* year: 'numeric', */
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const timeString = now.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+
+        // Combine with custom separator (you can add a dot, dash, or just spacing)
+        document.getElementById('date-time').innerHTML = `
+        <span class="the-date">${dateString}</span>
+        <span class="the-time">${timeString}</span>`;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+</script>
