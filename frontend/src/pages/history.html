@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Payment History | Billing</title>
-        <link rel="icon" href="/frontend/public/logo-cross.png">
+        <link rel="icon" href="/frontend/public/history-logo-cross.svg">
         <link rel="stylesheet" href="history.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     </head>
@@ -13,57 +13,168 @@
         <header>
             <!-- Navigation / Header bar -->
             <nav>
-                <div class="logo">
-                    <a href="#"><img src="/frontend/public/logo-combined.png" alt="SIMC Logo"></a>
+                <div class="history-logo">
+                    <a href="#"><img src="/frontend/public/history-logo-combined.svg" alt="SIMC Logo"></a>
                 </div>
 
-                <div class="right-side">
-                    <div class="date-time" id="date-time"></div>
-                    <div class="avatar">
-                    <a href="#"><img src="/frontend/public/Avatar.png" alt="Avatar"></a>
+                <div class="history-right-side">
+                    <div class="history-date-time" id="date-time"></div>
+                    <div class="history-avatar">
+                    <a href="#"><img src="/frontend/public/history-avatar.svg" alt="Avatar"></a>
                     </div>
                 </div>
             </nav>
         </header>
 
-        <div class="layout-wrapper">
+        <div class="history-layout-wrapper">
             <!-- Sidebar -->
-            <aside class="sidebar">
-            <ul class="nav-links">
-                <li class="Billing"><a href="#"><img src="/frontend/public/history-icon-1.png" alt="Billing Icon"> Patient Billing</a></li>
-                <li class="History"><a href="#"><img src="/frontend/public/history-icon-2.png" alt="History Icon"> Payment History</a></li>
-                <li class="Revenue"><a href="#"><img src="/frontend/public/history-icon-3.png" alt="Reports Icon"> Revenue Reports</a></li>
+            <aside class="history-sidebar">
+            <ul class="history-nav-links">
+                <li class="history-billing"><a href="#"><img src="/frontend/public/history-icon-1.svg" alt="Billing Icon"> Patient Billing</a></li>
+                <li class="history-history"><a href="#"><img src="/frontend/public/history-icon-2.svg" alt="History Icon"> Payment History</a></li>
+                <li class="history-revenue"><a href="#"><img src="/frontend/public/history-icon-3.svg" alt="Reports Icon"> Revenue Reports</a></li>
             </ul>
             </aside>
         
             <!-- Main content -->
-            <main class="main-content">
-                <div class="payment-summary">
-                    <div class="status paid">
-                        <p>Paid Payments</p>
-                        <p class="count-1">(99)</p> <br>
-                        <h2 class="amount">₱ 246,987.89</h2>
+            <main class="history-main-content">
+                <!-- Payment Summary Section -->
+                <div class="history-payment-summary">
+                    <div class="history-status history-paid">
+                        <div class="history-status-header">
+                            <p>Paid Payments</p>
+                            <p class="history-count-1">(99)</p>
+                        </div>
+                        <br>
+                        <h2 class="history-amount">₱ 246,987.89</h2>
                         <!-- change to legit data by linking it -->
                     </div>
-                    <div class="status partial">
-                        <p>Partial Payments</p> 
-                        <p class="count-2">(56)</p> <br>
-                        <h2 class="amount">₱ 135,786.56</h2>
+                    <div class="history-status history-partial">
+                        <div class="history-status-header">
+                            <p>Partial Payments</p> 
+                            <p class="history-count-2">(56)</p> <br>
+                        </div>
+                        <br>
+                        <h2 class="history-amount">₱ 135,786.56</h2>
                         <!-- change to legit data by linking it -->
                     </div>
-                    <div class="status overdue">
-                        <p>Overdue Payments (8)<p> 
-                        <p class="count-3">(8)</p> <br>
-                        <h2 class="amount">₱ 76,678.12</h2>
+                    <div class="history-status history-overdue">
+                        <div class="history-status-header">
+                            <p>Overdue Payments<p> 
+                            <p class="history-count-3">(8)</p> <br>
+                        </div>
+                        <br>
+                        <h2 class="history-amount">₱ 76,678.12</h2>
                         <!-- change to legit data by linking it -->
                     </div>
                 </div>
 
-            <h1>Welcome</h1>
+                <!-- Search bar and Filter section -->
+                <h2 class="history-title">Payment History</h2>
+                <div class="history-search-bar">
+                    <div class="history-search-wrapper">
+                        <input type="text" placeholder="Search patient name" />
+                        <img src="/frontend/public/history-icon-4.svg" alt="Search Icon" />
+                    </div>
+                    <p> Filter by </p>
+                    <select>
+                        <option>Payment (All)</option>
+                        <option>Cash</option>
+                        <option>Online</option>
+                        <option>Bank Transfer</option>
+                    </select>
+                    <select>
+                        <option>Date (All)</option>
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                    </select>
+                    <select>
+                        <option>Status (All)</option>
+                        <option>Voided</option>
+                        <option>Partial</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+            
+                <!-- Table section -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Patient ID</th>
+                            <th>Total Amount</th>
+                            <th>Amount Paid</th>
+                            <th>Payment Method</th>
+                            <th>Status</th>
+                            <th>Payment Date</th>
+                            <th>History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Anita Reyes</td>
+                            <td>IPT-2038</td>
+                            <td>₱3,100.00</td>
+                            <td>₱1,000.00</td>
+                            <td>Cash</td>
+                            <td><div class="history-table-voided">Voided</div></td>
+                            <td>Apr 18, 2025</td>
+                            <td class="history-view"><a href="#">View History →</a></td>
+                        </tr>
+                        <tr>
+                            <td>Allan Soriano</td>
+                            <td>IPT-4067</td>
+                            <td>₱3,100.00</td>
+                            <td>₱1,000.00</td>
+                            <td>Cash</td>
+                            <td><div class="history-table-partial">Partial</div></td>
+                            <td>Apr 18, 2025</td>
+                            <td class="history-view"><a href="#">View History →</a></td>
+                        </tr>
+                        <tr>
+                            <td>Alex Great</td>
+                            <td>IPT-3092</td>
+                            <td>₱3,100.00</td>
+                            <td>₱1,000.00</td>
+                            <td>Online</td>
+                            <td><div class="history-table-paid">Paid</div></td>
+                            <td>Apr 18, 2025</td>
+                            <td class="history-view"><a href="#">View History →</a></td>
+                        </tr>
+                        <tr>
+                            <td>Alexa Rose Yu</td>
+                            <td>IPT-3092</td>
+                            <td>₱3,100.00</td>
+                            <td>₱1,000.00</td>
+                            <td>Bank Transfer</td>
+                            <td><div class="history-table-paid">Paid</div></td>
+                            <td>Apr 18, 2025</td>
+                            <td class="history-view"><a href="#">View History →</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="history-pagination">
+                    <span class="page-arrow">&lt;</span>
+                    <span class="page-number active">1</span>
+                    <span class="page-number">2</span>
+                    <span class="page-number">3</span>
+                    <span class="page-number">4</span>
+                    <span class="page-arrow">&gt;</span>
+                </div>
             </main>
         </div>
-
-
     </body>
 </html>
 
