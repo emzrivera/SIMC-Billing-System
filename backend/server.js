@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 
 dotenv.config();
@@ -9,14 +8,12 @@ connectDB();
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
 app.use(express.json());
-
-// VALID LOGIN CREDENTIALS
+    
 const VALID_USERNAME = 'admin';
-const VALID_PASSWORD = 'secret123';
+const VALID_PASSWORD = 'adminpass';
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth', (req, res) => {
   const { username, password } = req.body;
   if (username === VALID_USERNAME && password === VALID_PASSWORD) {
     return res.status(200).json({ message: 'Login successful' });
@@ -25,8 +22,16 @@ app.post('/api/auth/login', (req, res) => {
   }
 });
 
+const billingRoutes = require('./routes/BillingRoutes');
+app.use('/api/billing', billingRoutes);
 
+const mockRoutes = require('./routes/mockRoutes');
+app.use('/api/mock', mockRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.get('/api', (req, res) => {
+  res.send('✅ API is working');
+});
+
+app.listen(5000, () => {
+  console.log('✅ Server running on http://localhost:5000');
 });
