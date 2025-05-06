@@ -10,11 +10,21 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
-const patientRoutes = require('./routes/patientRoutes');
+// VALID LOGIN CREDENTIALS
+const VALID_USERNAME = 'admin';
+const VALID_PASSWORD = 'secret123';
 
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+    return res.status(200).json({ message: 'Login successful' });
+  } else {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+});
 
-app.use('/api', patientRoutes);
 
 
 app.listen(process.env.PORT, () => {
