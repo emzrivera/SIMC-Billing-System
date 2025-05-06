@@ -1,11 +1,10 @@
 import { Routes, Route, BrowserRouter} from 'react-router-dom';
 
 //pages
-import Home from './pages/Home';
-import Login from './pages/Login';
-
-import Billing from './pages/Billing';
-import History from './pages/History';
+import Home from './pages/Home.js';
+import Login from './pages/Login.js';
+import Billing from './pages/Billing.js';
+import History from './pages/History.js';
 
 function App() {
   return (

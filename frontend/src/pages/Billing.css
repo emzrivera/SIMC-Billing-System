@@ -1,8 +1,17 @@
+
+.main-layout {
+  display: flex; 
+  height: 100vh;
+  margin-top: 0; 
+  gap: 60px;
+}
+
 .patient-billing-container {
     padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f6fa;
+    background-color: #ffffff;
     flex-grow: 1;
+    margin-right: 60px;
+    margin-top: 30px;
   }
   
   .stats-container {
@@ -14,7 +23,7 @@
   
   .stat-card {
     background-color: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
     flex: 1;
@@ -32,11 +41,19 @@
   }
   
   .stat-card.blue {
-    border-left: 6px solid #007bff;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--color-primary);
+    border-left: 6px solid var(--color-primary);
+    background-color: var(--color-accent);
+    gap: 50px;
+    padding: 40px;
   }
   
   .stat-card.gray {
+    border: 1px solid #adb5bd;
     border-left: 6px solid #adb5bd;
+    padding-left: 50px;
   }
   
   .invoice-section {
@@ -50,22 +67,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 20px;
     margin-bottom: 15px;
     flex-wrap: wrap;
     gap: 10px;
   }
   
-  .invoice-header h3 {
-    margin: 0;
+  .invoice-section .invoice-title {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: bold;
+    color: var(--color-primary);
   }
   
   .invoice-header input[type="text"] {
-    padding: 8px 12px;
+    padding: 15px 15px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    width: 250px;
+    width: 340px;
     font-size: 14px;
   }
   
@@ -75,45 +93,55 @@
   }
   
   .export-btn, .add-btn {
-    padding: 8px 14px;
+    padding: 10px 14px;
     border-radius: 6px;
     border: none;
     font-size: 14px;
     cursor: pointer;
+    width: 150px;
   }
   
   .export-btn {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color:  var(--color-secondary2);
+    color: white;
   }
   
   .add-btn {
-    background-color: #007bff;
+    background-color: var(--color-secondary2);
     color: white;
   }
   
   .invoice-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 16px;
     margin-top: 15px;
   }
   
   .invoice-table thead {
-    background-color: #f9fafb;
+    background-color: #ffffff;
   }
   
   .invoice-table th, .invoice-table td {
     text-align: left;
-    padding: 12px 10px;
+    padding: 20px 10px;
     border-bottom: 1px solid #eaeaea;
+  }
+
+  .invoice-table th{
+    font-size: 14px;
   }
   
   .invoice-table td span.status {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 16px;
     font-weight: 600;
+    min-width: 100px; 
+    text-align: center;
   }
   
   .status.paid {
@@ -128,7 +156,7 @@
   
   .status.voided {
     background-color: #fdecea;
-    color: #d32f2f;
+    color: #FF6060;
   }
   
   .pagination {
