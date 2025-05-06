@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter} from 'react-router-dom';
 //pages
 import Patients from './pages/Patients';
 
+//routes
 function App() {
   return (
     <BrowserRouter>

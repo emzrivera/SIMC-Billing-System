@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 function Patients() {
   const [patients, setPatients] = useState([]);
 
-  // Fetch patient data from the backend
+  // fetch patient data from backend
   useEffect(() => {
     fetch('http://localhost:5000/api/')
       .then(response => response.json())
