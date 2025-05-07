@@ -1,23 +1,41 @@
-import { Routes, Route, BrowserRouter} from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
-//pages
+// Importing pages
 import Home from './pages/Home.js';
 import Login from './pages/Login.js';
 import Billing from './pages/Billing.js';
 import History from './pages/History.js';
+import InvoiceDetails from './pages/InvoiceDetails.js';
 
-function App() {
+// Importing components
+import SideNavBar from './components/SideNavBar';
+import TopNavBar from './components/TopNavBar';
+
+
+const App = () => {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/Billing" element={<Billing />} />
-          <Route path="/History" element={<History />} />
-        
-        </Routes>
-    </BrowserRouter>
+      {/* Wrapping everything inside BrowserRouter */}
+      <TopNavBar /> {/* This will stay on top */}
+      
+      <div style={{ display: 'flex' }}>
+        {/* Fixed sidebar */}
+        <SideNavBar /> 
 
+        <div style={{ marginLeft: '300px', padding: '20px', flex: 1 }}>
+          {/* Main content container */}
+          <Routes>
+            {/* Define routes to the pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/invoice" element={<InvoiceDetails />} />
+            <Route path="/history" element={<History />} />
+          </Routes>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

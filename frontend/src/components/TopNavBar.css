@@ -21,7 +21,7 @@
   .top-nav .right-section {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 80px;
   }
   
   .top-nav .time, .top-nav .date {
@@ -30,13 +30,14 @@
   }
   
   .top-nav .settings-icon {
-    font-size: 20px;
+    margin-top: 5px;
+    font-size: 25px;
     cursor: pointer;
     color: #555;
     transition: color 0.2s ease;
   }
   
   .top-nav .settings-icon:hover {
-    color: #000;
+    color: var(--color-primary);
   }
   

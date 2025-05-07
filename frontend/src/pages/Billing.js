@@ -1,7 +1,10 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'; 
 import './Billing.css'; 
 import TopNavBar from '../components/TopNavBar.js'; 
 import SideNavBar from '../components/SideNavBar.js'; 
+
+import { HiOutlineDotsVertical } from 'react-icons/hi';
 
 
 const Billing = () => {
@@ -44,11 +47,6 @@ const Billing = () => {
   return (
 
     <div>
-        <TopNavBar />
-
-    <div className= "main-layout">  
-        <SideNavBar />
-  
     <div className="patient-billing-container">
       <div className="stats-container">
         <div className="stat-card blue">
@@ -110,7 +108,10 @@ const Billing = () => {
                 <td>₱{invoice.balance.toLocaleString()}</td>
                 <td><span className={getStatusClass(invoice.status)}>{invoice.status}</span></td>
                 <td>{invoice.date}</td>
-                <td>⋮</td>
+                <td><NavLink to={`/invoice`} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <HiOutlineDotsVertical size={20} color="#555" />
+                   </NavLink>
+                   </td>
               </tr>
             ))}
           </tbody>
@@ -118,8 +119,6 @@ const Billing = () => {
       </div>
 
       </div>
-    </div>
-
     </div>
   );
 };

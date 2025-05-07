@@ -1,26 +1,30 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'; 
 import './SideNavBar.css';
-import { FiHome, FiFileText, FiUser, FiCreditCard } from 'react-icons/fi';
+import { FiFileText, FiClock, FiTrendingUp  } from 'react-icons/fi';
 
 const SideNavBar = () => {
   return (
     <div className="side-nav">
       <ul className="nav-list">
+      
+        <li className="nav-item">
+            <NavLink to="/billing" className="nav-link">
+            <FiFileText className="nav-icon" />
+            <span>Patient Billing</span>
+          </NavLink>
+        </li>  
         <li className="nav-item active">
-          <FiHome className="nav-icon" />
-          <span>Dashboard</span>
+        <NavLink to="/history" className="nav-link">
+            <FiClock className="nav-icon" />
+            <span>Payment History</span>
+          </NavLink>
         </li>
         <li className="nav-item">
-          <FiUser className="nav-icon" />
-          <span>Patients</span>
-        </li>
-        <li className="nav-item">
-          <FiFileText className="nav-icon" />
-          <span>Billing</span>
-        </li>
-        <li className="nav-item">
-          <FiCreditCard className="nav-icon" />
-          <span>Invoices</span>
+          <NavLink to="/reports" className="nav-link">
+            <FiTrendingUp className="nav-icon" />
+            <span>Revenue Reports</span>
+          </NavLink>
         </li>
       </ul>
     </div>

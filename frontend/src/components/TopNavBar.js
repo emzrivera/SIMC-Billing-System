@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../components/TopNavBar.css';
-import { FiSettings } from 'react-icons/fi';
+import { HiOutlineLogout } from 'react-icons/hi';
 import ignatiusLogo from '../assets/ignatiuslogo.svg'; // adjust path as needed
 
 const TopNavBar = () => {
@@ -33,7 +33,7 @@ const TopNavBar = () => {
       <div className="date">{date}</div>
       <div className="time">{time}</div>
         <div className="settings-icon">
-          <FiSettings />
+          <HiOutlineLogout  />
         </div>
       </div>
     </div>
