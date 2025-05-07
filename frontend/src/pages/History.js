@@ -1,5 +1,5 @@
 import React from 'react';
-import './history.css';  // Import the CSS file
+import './History.css';  // Import the CSS file
 
 const PaymentHistory = () => {
 
