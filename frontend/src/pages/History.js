@@ -1,106 +1,163 @@
-import React from 'react';
-import './History.css';  // Import the CSS file
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import './History.css';
+
+const getMonthFromDate = (dateStr) => {
+  const options = { month: 'long' };
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', options);
+};
 
 const PaymentHistory = () => {
+  const [paymentData, setPaymentData] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterMethod, setFilterMethod] = useState('All');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [filterDate, setFilterDate] = useState('All');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = [
+        {
+          name: 'Anita Reyes',
+          id: 'IPT-2038',
+          total: '₱3,100.00',
+          paid: '₱1,000.00',
+          method: 'Cash',
+          status: 'Voided',
+          date: 'Apr 18, 2025',
+        },
+        {
+          name: 'Allan Soriano',
+          id: 'IPT-4067',
+          total: '₱3,100.00',
+          paid: '₱1,000.00',
+          method: 'Cash',
+          status: 'Partial',
+          date: 'Apr 18, 2025',
+        },
+        {
+          name: 'Alex Great',
+          id: 'IPT-3092',
+          total: '₱3,100.00',
+          paid: '₱1,000.00',
+          method: 'Online',
+          status: 'Paid',
+          date: 'Jan 10, 2025',
+        },
+        {
+          name: 'Alexa Rose Yu',
+          id: 'IPT-3092',
+          total: '₱3,100.00',
+          paid: '₱1,000.00',
+          method: 'Bank Transfer',
+          status: 'Paid',
+          date: 'Feb 28, 2025',
+        },
+      ];
+
+      setPaymentData(data);
+
+      const months = [...new Set(data.map((item) => getMonthFromDate(item.date)))];
+      setAvailableMonths(months);
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = paymentData.filter((payment) => {
+    const matchesSearch = payment.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesMethod = filterMethod === 'All' || payment.method === filterMethod;
+    const matchesStatus = filterStatus === 'All' || payment.status === filterStatus;
+    const matchesDate =
+      filterDate === 'All' ||
+      getMonthFromDate(payment.date).toLowerCase() === filterDate.toLowerCase();
+
+    return matchesSearch && matchesMethod && matchesStatus && matchesDate;
+  });
 
   return (
     <div className="history-layout-wrapper">
-      
-
       <main className="history-main-content">
         <h2 className="history-title">Payment History</h2>
+
         <div className="history-search-bar">
           <div className="history-search-wrapper">
-            <input type="text" placeholder="Search patient name" />
+            <input
+              type="text"
+              placeholder="Search patient name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <img src="/history-icon-4.svg" alt="Search Icon" />
           </div>
+
           <p>Filter by</p>
-          <select>
-            <option>Payment (All)</option>
-            <option>Cash</option>
-            <option>Online</option>
-            <option>Bank Transfer</option>
+
+          <select value={filterMethod} onChange={(e) => setFilterMethod(e.target.value)}>
+            <option value="All">Payment (All)</option>
+            <option value="Cash">Cash</option>
+            <option value="Online">Online</option>
+            <option value="Bank Transfer">Bank Transfer</option>
           </select>
-          <select>
-            <option>Date (All)</option>
-            <option>January</option>
-            <option>February</option>
-            <option>March</option>
-            <option>April</option>
-            <option>May</option>
-            <option>June</option>
-            <option>July</option>
-            <option>August</option>
-            <option>September</option>
-            <option>October</option>
-            <option>November</option>
-            <option>December</option>
+
+          <select value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
+            <option value="All">Month (All)</option>
+            {availableMonths.map((month, index) => (
+              <option key={index} value={month}>
+                {month}
+              </option>
+            ))}
           </select>
-          <select>
-            <option>Status (All)</option>
-            <option>Voided</option>
-            <option>Partial</option>
-            <option>Paid</option>
+
+          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+            <option value="All">Status (All)</option>
+            <option value="Voided">Voided</option>
+            <option value="Partial">Partial</option>
+            <option value="Paid">Paid</option>
           </select>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Patient Name</th>
-              <th>Patient ID</th>
-              <th>Total Amount</th>
-              <th>Amount Paid</th>
-              <th>Payment Method</th>
-              <th>Status</th>
-              <th>Payment Date</th>
-              <th>History</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Anita Reyes</td>
-              <td>IPT-2038</td>
-              <td>₱3,100.00</td>
-              <td>₱1,000.00</td>
-              <td>Cash</td>
-              <td><div className="history-table-voided">Voided</div></td>
-              <td>Apr 18, 2025</td>
-              <td className="history-view"><a href="#">View History →</a></td>
-            </tr>
-            <tr>
-              <td>Allan Soriano</td>
-              <td>IPT-4067</td>
-              <td>₱3,100.00</td>
-              <td>₱1,000.00</td>
-              <td>Cash</td>
-              <td><div className="history-table-partial">Partial</div></td>
-              <td>Apr 18, 2025</td>
-              <td className="history-view"><a href="#">View History →</a></td>
-            </tr>
-            <tr>
-              <td>Alex Great</td>
-              <td>IPT-3092</td>
-              <td>₱3,100.00</td>
-              <td>₱1,000.00</td>
-              <td>Online</td>
-              <td><div className="history-table-paid">Paid</div></td>
-              <td>Apr 18, 2025</td>
-              <td className="history-view"><a href="#">View History →</a></td>
-            </tr>
-            <tr>
-              <td>Alexa Rose Yu</td>
-              <td>IPT-3092</td>
-              <td>₱3,100.00</td>
-              <td>₱1,000.00</td>
-              <td>Bank Transfer</td>
-              <td><div className="history-table-paid">Paid</div></td>
-              <td>Apr 18, 2025</td>
-              <td className="history-view"><a href="#">View History →</a></td>
-            </tr>
-          </tbody>
-        </table>
+        {filteredData.length === 0 ? (
+          <p style={{ marginTop: '2rem', textAlign: 'center' }}>No records found.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Patient Name</th>
+                <th>Patient ID</th>
+                <th>Total Amount</th>
+                <th>Amount Paid</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Payment Date</th>
+                <th>History</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((payment, index) => (
+                <tr key={index}>
+                  <td>{payment.name}</td>
+                  <td>{payment.id}</td>
+                  <td>{payment.total}</td>
+                  <td>{payment.paid}</td>
+                  <td>{payment.method}</td>
+                  <td>
+                    <div className={`history-table-${payment.status.toLowerCase()}`}>
+                      {payment.status}
+                    </div>
+                  </td>
+                  <td>{payment.date}</td>
+                  <td className="history-view">
+                    <Link to="/patient-history">View History →</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         <div className="history-pagination">
           <span className="page-arrow">&lt;</span>
