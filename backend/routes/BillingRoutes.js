@@ -10,32 +10,35 @@ router.get('/', async (req, res) => {
 
     for (const patient of patients) {
       const servicePriceMap = {
-        'consultation': 500,
+        'consultation': 1000,
         'laboratory': 1000,
         'x-ray': 800,
-        'surgery': 5000
+        'surgery': 50000,
+        'ct scan': 3000
       };
 
       const medicalServices = patient.medicalServices.map(service => {
-        const unitPrice = servicePriceMap[service.toLowerCase()] || 0;
+        const clean = service.toLowerCase().trim();
+        const unitPrice = servicePriceMap[clean] || 0;
         return { name: service, price: unitPrice };
       });
 
       const serviceTotal = medicalServices.reduce((sum, svc) => sum + svc.price, 0);
 
       const roomRateMap = {
-        'private room': 1500,
+        'vip': 5000,
+        'private room': 1000,
         'semi-private': 1000,
         'ward': 500
       };
-      const roomRate = roomRateMap[patient.roomType.toLowerCase()] || 0;
+      const roomRate = roomRateMap[patient.roomType.toLowerCase().trim()] || 0;
       const roomTotal = roomRate * patient.noOfDays;
 
       let medicineTotal = 0;
       const detailedMeds = [];
 
       for (const med of patient.medicines) {
-        const inventory = await MedicineInventory.findOne({ name: med.name });
+        const inventory = await MedicineInventory.findOne({ name: new RegExp(`^${med.name.trim()}$`, 'i') })
         const medPrice = inventory ? inventory.price : 0;
         const total = medPrice * med.quantity;
         medicineTotal += total;

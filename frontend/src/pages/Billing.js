@@ -33,7 +33,7 @@ const Billing = () => {
 
         setInvoices(fetched);
       } catch (err) {
-        console.error('❌ Failed to fetch billing data:', err);
+        console.error('Failed to fetch billing data:', err);
       }
     };
 
