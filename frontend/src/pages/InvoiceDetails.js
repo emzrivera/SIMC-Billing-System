@@ -37,7 +37,7 @@ const InvoiceDetails = () => {
           </thead>
           <tbody>
             <tr className="section">
-              <td colSpan="4"><strong>🩺 Medical Services</strong></td>
+              <td colSpan="4"><strong> Medical Services</strong></td>
             </tr>
             <tr>
               <td>Consultation</td>
@@ -59,7 +59,7 @@ const InvoiceDetails = () => {
             </tr>
 
             <tr className="section">
-              <td colSpan="4"><strong>🛏 Room Charge</strong></td>
+              <td colSpan="4"><strong> Room Charge</strong></td>
             </tr>
             <tr>
               <td>Private Room</td>
@@ -69,7 +69,7 @@ const InvoiceDetails = () => {
             </tr>
 
             <tr className="section">
-              <td colSpan="4"><strong>💊 Medicine</strong></td>
+              <td colSpan="4"><strong> Medicine</strong></td>
             </tr>
             <tr>
               <td>Paracetamol</td>
