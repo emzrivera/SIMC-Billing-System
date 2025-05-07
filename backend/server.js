@@ -25,6 +25,9 @@ app.post('/api/auth', (req, res) => {
 const billingRoutes = require('./routes/BillingRoutes');
 app.use('/api/billing', billingRoutes);
 
+const billingRecordRoutes = require('./routes/BillingRecordRoutes');
+app.use('/api/billing-records', billingRecordRoutes);
+
 const mockRoutes = require('./routes/mockRoutes');
 app.use('/api/mock', mockRoutes);
 
