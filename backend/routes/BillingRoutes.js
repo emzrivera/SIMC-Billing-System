@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const PatientRecord = require('../models/PatientRecordModel');
 const MedicineInventory = require('../models/MedicineInvModel');
+const BillingRecord = require('../models/BillingRecordModel');
 
-router.get('/', async (req, res) => {
+router.get('/generate', async (req, res) => {
   try {
     const patients = await PatientRecord.find();
     const results = [];
+    let counter = 1;
 
     for (const patient of patients) {
       const servicePriceMap = {
@@ -52,6 +54,23 @@ router.get('/', async (req, res) => {
       }
 
       const totalBill = serviceTotal + roomTotal + medicineTotal;
+      const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
+      counter++;
+
+      await BillingRecord.findOneAndUpdate(
+        { invoiceId },
+        {
+          invoiceId,
+          patientName: patient.patientName,
+          patientId: patient.patientID,
+          totalAmount: totalBill,
+          amountPaid: 0,
+          balanceDue: totalBill,
+          status: 'Unpaid',
+          invoiceDate: new Date()
+        },
+        { upsert: true, new: true }
+      );
 
       results.push({
         patientID: patient.patientID,

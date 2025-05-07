@@ -13,36 +13,40 @@ const Billing = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/billing');
+        await fetch('http://localhost:5000/api/billing/generate');
+        const res = await fetch('http://localhost:5000/api/billing-records');
         const records = await res.json();
-
-        const fetched = records.map(data => {
-          const total = data.totalBill;
-          const paid = 0;
-          const balance = total - paid;
-
+        const fetched = records.map((record, index) => {
+          const total = record.totalAmount ?? 0;
+          const paid = record.amountPaid ?? 0;
+          const balance = record.balanceDue ?? 0;
+          const invoiceId = record.invoiceId || `INV-${String(index + 1).padStart(4, '0')}`;
+  
           return {
-            id: `INV-${Math.floor(Math.random() * 90000 + 10000)}`,
-            name: data.patientName,
-            patientId: data.patientID,
+            id: invoiceId,
+            name: record.patientName || 'Unknown',
+            patientId: record.patientId || 'Unknown',
             total,
             paid,
             balance,
-            status: balance === 0 ? 'Paid' : paid > 0 ? 'Partial' : paid === 0? 'Unpaid' : 'Voided',
-            date: new Date().toLocaleDateString('en-US', {
-              month: 'short', day: 'numeric', year: 'numeric'
-            })
+            status: record.status || 'Unpaid',
+            date: record.invoiceDate
+              ? new Date(record.invoiceDate).toLocaleDateString('en-US', {
+                  month: 'short', day: 'numeric', year: 'numeric'
+                })
+              : 'Unknown'
           };
         });
-
+  
         setInvoices(fetched);
       } catch (err) {
         console.error('Failed to fetch billing data:', err);
       }
     };
-
+  
     fetchInvoices();
   }, []);
+  
 
   const getStatusClass = (status) => {
     switch (status) {
