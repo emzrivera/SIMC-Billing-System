@@ -18,12 +18,12 @@ import TopNavBar from './components/TopNavBar';
 
 const AppLayout = () => {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/';
 
   if (isLoginPage) {
     return (
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
       </Routes>
     );
   }
@@ -36,7 +36,7 @@ const AppLayout = () => {
         <SideNavBar />
         <div style={{ marginLeft: '300px', padding: '20px', flex: 1 }}>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/mock" element={<MockInputPage />} />
             <Route path="/meds" element={<Meds />} />
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
