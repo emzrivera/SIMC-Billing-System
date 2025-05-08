@@ -13,8 +13,8 @@ const Billing = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        await fetch('http://localhost:5000/api/billing/generate');
-        const res = await fetch('http://localhost:5000/api/billing-records');
+        await fetch(`${process.env.SERVER_URL}/api/billing/generate`);
+        const res = await fetch(`${process.env.SERVER_URL}/api/billing-records`);
         const records = await res.json();
         const fetched = records.map((record, index) => {
           const total = record.totalAmount ?? 0;

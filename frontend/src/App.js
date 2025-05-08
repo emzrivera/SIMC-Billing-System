@@ -36,7 +36,7 @@ const AppLayout = () => {
         <SideNavBar />
         <div style={{ marginLeft: '300px', padding: '20px', flex: 1 }}>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/mock" element={<MockInputPage />} />
             <Route path="/meds" element={<Meds />} />
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
