@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const fetch = require('node-fetch'); 
+const path = require('path');
 
 dotenv.config();
 connectDB();
@@ -33,7 +34,6 @@ const mockRoutes = require('./routes/mockRoutes');
 app.use('/api/mock', mockRoutes);
 
 
-
 app.get('/api/inventory', async (req, res) => {
   try {
     const response = await fetch('https://pims-d.onrender.com/inventory');
@@ -49,6 +49,14 @@ app.get('/api/inventory', async (req, res) => {
 app.get('/api', (req, res) => {
   res.send('API is running...');
 });
+
+
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+});
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
