@@ -1,15 +1,7 @@
-.invoice-details-page {
-    background-color: #f9fafb;
-    padding: 30px 0;
-  }
-  
-  .main-content {
-    flex-grow: 1;
+
+  .invoice-details-container {
     display: flex;
     flex-direction: column;
-  }
-  
-  .invoice-details-container {
     padding: 30px 40px;
     background-color: #fff;
   }
@@ -17,135 +9,51 @@
   .breadcrumb {
     color: #666;
     font-size: 14px;
-    margin-bottom: 15px;
+
+  }
+
+  .breadcrumb-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
   }
   
-  .breadcrumb .link {
-    color: #007bff;
-    cursor: pointer;
+  .back-btn {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  
+  .back-btn svg {
+    width: 12px;
+    height: 12px;
+    color: #6F6F6F;
   }
   
   .header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-right {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
-  .status.paid {
-    background-color: #e0f7e9;
-    color: #2e7d32;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-  }
-  
-  .last-paid {
-    font-size: 13px;
-    color: #888;
-    margin-top: 5px;
-  }
-  
-  .invoice-meta {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    font-size: 14px;
-  }
-  
-  .charges-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    font-size: 14px;
-  }
-  
-  .charges-table thead {
-    background-color: #f1f1f1;
-  }
-  
-  .charges-table th, .charges-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e0e0e0;
-    text-align: left;
-  }
-  
-  .charges-table .section td {
-    background-color: #f9f9f9;
-    font-weight: bold;
-  }
-  
-  .summary-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .notes {
-    background-color: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    padding: 15px;
-    border-radius: 6px;
-    width: 100%;
-    max-width: 40%;
-  }
-  
-  .summary-box {
-    border: 1px solid #007bff;
-    padding: 20px;
-    border-radius: 6px;
-    width: 100%;
-    max-width: 40%;
-    background-color: #fff;
-  }
-  
-  .summary-box h4 {
-    margin-bottom: 15px;
-  }
-  
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .summary-row.total-remaining {
-    font-weight: bold;
-    border-top: 1px solid #ccc;
-    padding-top: 10px;
-  }
-  
-  .badge {
-    background-color: #ccc;
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 6px;
-    font-size: 11px;
-    margin-left: 5px;
-  }
-  
-  .badge.blue {
-    background-color: #007bff;
-  }
-  
-  .generate-btn {
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    margin-top: 15px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .action-buttons {
-    margin-top: 30px;
+  .header-row .action-buttons {
     display: flex;
     gap: 10px;
   }
+
   
   .edit-btn,
   .void-btn,
@@ -155,19 +63,254 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
   }
   
   .edit-btn {
-    background-color: #f0f0f0;
+    border: 2px solid #757575 ;
+    background-color: white;
+    color: #757575;
   }
   
   .void-btn {
-    background-color: #ff4d4f;
-    color: white;
+    border: 2px solid #ff4d4f ;
+    background-color: white;
+    color: #ff4d4f;
   }
   
   .add-btn {
-    background-color: #007bff;
+    background-color: var(--color-secondary2);
     color: white;
+    font-weight: 600;
+    margin-left: 20px;
+  }
+
+  .action-buttons button svg {
+    width: 15px;           
+    height: auto;          
+    margin-right: 4px;
+    vertical-align: middle;    
+  }
+
+  .status.paid {
+    background-color: #E3F9EF;
+    color: #0F9F18;
+    padding: 4px 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
   }
   
+  .last-paid {
+    font-size: 13px;
+    color: #888;
+    margin-top: 5px;
+  }
+
+  .invoice-details-container .line-separator {
+    border: none;
+    border-bottom: 1px solid #BFBEBE;
+    margin: 20px 0;
+    margin-bottom: 10px;
+  }
+
+  .invoice-content {
+    display: flex;
+    gap: 40px;
+  }
+
+  .invoice-details {
+    flex: 1;
+  }
+  
+  .invoice-meta {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0 30px 0;
+    
+    font-size: 14px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+  
+  .meta-item .label {
+    font-size: 12px;
+    color: var(--color-lighttext);
+    margin-bottom: 2px;
+  }
+  
+  .meta-item .value {
+    font-size: 14px;
+    color: var(--color-text);
+  }
+  
+  .charges-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: var(--color-text);
+    margin-bottom: 30px;
+  }
+  
+  .charges-table thead {
+    background-color: #F8F8F8;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .charges-table th,
+  .charges-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+
+  .charges-table thead th {
+    font-size: 12px;
+    font-weight: normal; 
+  }
+  
+  .charges-table .section {
+    background-color: #fcfcfc;
+  }
+  
+  .charges-table .section td {
+    padding-top: 20px;
+    padding-bottom: 6px;
+    font-weight: bold;
+    color: var(--color-text);
+    border-bottom: none;
+  }
+  
+  .charges-table .section strong {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .charges-table tbody tr.charge-row td:first-child {
+    padding-left: 60px;
+  }
+  
+  .charges-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .charges-table td:last-child,
+  .charges-table th:last-child {
+    text-align: right;
+  }
+
+  .charges-table th:first-child,
+.charges-table td:first-child { 
+  padding-left: 40px; /* Optional: add more padding to the left for spacing */
+}
+
+/* Align the last column's header and content to the center */
+.charges-table th:last-child,
+.charges-table td:last-child {
+  text-align: center; /* Align the last column content to the center */
+}
+  
+  /* .charges-table tbody tr:hover {
+    background-color: #f4f4f4;
+    cursor: default;
+  }
+   */
+  .summary-actions {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  
+  .notes .notes-title {
+    font-size: 16px;
+    background-color: #F8F8F8;
+    color: var(--color-text); 
+    padding: 15px 15px;
+    margin: -20px -20px 15px -20px; 
+    border-radius: 8px 8px 0 0;
+  }
+
+  .notes {
+    font-size: 14px;
+    background-color: fff;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  .summary-box {
+    border: 1px solid var(--color-secondary2);
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #fff;
+  }
+  
+  .summary-box .payment-title {
+    background-color: var(--color-accent);
+    color: var(--color-primary); 
+    padding: 15px 15px;
+    margin: -20px -20px 20px -20px; 
+    border-radius: 8px 8px 0 0;
+  }
+  
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
+  .summary-row.total-remaining {
+    font-size: 16px;
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  
+  .badge {
+    background-color: #F8F8F8;
+    color: var(--color-text);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-left: 5px;
+  }
+  
+  .badge.blue {
+    color: var(--color-primary);
+    background-color: var(--color-accent);
+  }
+  
+  .generate-btn {
+    width: 100%;
+    background-color: var(--color-secondary2);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  
+.edit-btn:hover,
+.void-btn:hover,
+.add-btn:hover,
+.generate-btn:hover {
+  filter: brightness(90%);
+}

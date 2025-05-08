@@ -60,7 +60,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+    
   }
   
   .invoice-header {
@@ -75,7 +75,7 @@
   
   .invoice-section .invoice-title {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--color-primary);
   }
   

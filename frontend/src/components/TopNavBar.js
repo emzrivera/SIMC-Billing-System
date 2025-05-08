@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom'; 
 import '../components/TopNavBar.css';
 import { HiOutlineLogout } from 'react-icons/hi';
 import ignatiusLogo from '../assets/ignatiuslogo.svg'; // adjust path as needed
@@ -33,7 +34,10 @@ const TopNavBar = () => {
       <div className="date">{date}</div>
       <div className="time">{time}</div>
         <div className="settings-icon">
-          <HiOutlineLogout  />
+        <NavLink
+  to="/billing"
+  className={({ isActive }) => (isActive ? 'active-link' : '')}
+> <HiOutlineLogout  /></NavLink>
         </div>
       </div>
     </div>
