@@ -36,7 +36,7 @@ app.use('/api/mock', mockRoutes);
 
 app.get('/api/inventory', async (req, res) => {
   try {
-    const response = await fetch('https://pims-d.onrender.com/inventory');
+    const response = await fetch(`${process.env.PHARMACY_API_URL}`);
     if (!response.ok) throw new Error(`API error: ${response.status}`);
     const data = await response.json();
     res.json(data);

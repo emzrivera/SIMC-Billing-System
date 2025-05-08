@@ -5,7 +5,7 @@ const InventoryPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://pims-d.onrender.com/inventory') // or your deployed URL
+    fetch(`${process.env.PHARMACY_API_URL}`) // or your deployed URL
       .then(res => res.json())
       .then(data => {
         setInventory(data);
