@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const fetch = require('node-fetch'); 
 
 dotenv.config();
 connectDB();
@@ -30,6 +31,20 @@ app.use('/api/billing-records', billingRecordRoutes);
 
 const mockRoutes = require('./routes/mockRoutes');
 app.use('/api/mock', mockRoutes);
+
+
+
+app.get('/api/inventory', async (req, res) => {
+  try {
+    const response = await fetch('https://pims-d.onrender.com/inventory');
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Inventory fetch error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch inventory', error: error.message });
+  }
+});
 
 app.get('/api', (req, res) => {
   res.send('API is running...');

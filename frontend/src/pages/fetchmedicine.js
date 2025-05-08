@@ -1,0 +1,34 @@
+import React, { useEffect, useState } from 'react';
+
+const InventoryPage = () => {
+  const [inventory, setInventory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('https://pims-d.onrender.com/inventory') // or your deployed URL
+      .then(res => res.json())
+      .then(data => {
+        setInventory(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Fetch error:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Loading inventory...</p>;
+
+  return (
+    <div>
+      <h2>Inventory List</h2>
+      <ul>
+        {inventory.map((item, index) => (
+          <li key={index}>{item.name} — Qty: {item.quantity}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default InventoryPage;
