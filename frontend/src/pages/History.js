@@ -151,7 +151,7 @@ const PaymentHistory = () => {
                   </td>
                   <td>{payment.date}</td>
                   <td className="history-view">
-                    <Link to="/patient-history">View History →</Link>
+                    <Link to="/patient-history" state={{ patient: payment }}>View History → </Link>
                   </td>
                 </tr>
               ))}
