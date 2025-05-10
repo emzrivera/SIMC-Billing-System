@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+
+.container 
+{
+    padding: 30px;
+}
+
+/* NAVIGATE BACK */
+header 
+{
+    display: flex;
+    border: none;
+    margin-bottom: 40px;
+}
+
+nav 
+{
+    margin: 0;
+    padding: 0;
+    gap: 6px;
+    border: none;
+    background: none;
+}
+
+nav p 
+{
+    display: inline;
+}
+
+nav a 
+{
+    text-decoration: none;
+    color: #0077B6;
+    font-weight: 700;
+}
+
+nav a,
+nav p 
+{
+    margin: 0;
+    padding: 0;
+}
+
+/* PROFILE */
+.profile 
+{
+    padding-left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.avatar 
+{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar img 
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.patient-info 
+{
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.patient-info h1 
+{
+  margin: 0;
+  font-size: 1.2rem;
+  padding-bottom: 10px;
+  font-weight: bolder;
+}
+
+.patient-info p 
+{
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* TITLE */
+.section-title 
+{
+    display: flex;
+    align-items: center;
+    color: #0077B6;
+    font-size: 16px;
+    margin: 20px 10px 30px;
+    margin-bottom: 30px;
+}
+
+.section-title::before,
+.section-title::after 
+{
+    content: "";
+    height: 1px;
+    background-color: #ccc;
+    flex-grow: 1;
+}
+
+.section-title::before 
+{
+    max-width: 30px;
+    margin-right: 10px;
+}
+
+.section-title::after 
+{
+    margin-left: 10px;
+}
+  
+/* MAIN CONTENT */
+.main-section 
+{
+    display: flex;
+    gap: 20px;
+}
+
+/* Payment section */
+.payment-history 
+{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.payment-item 
+{
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--Neutral-grey-300, #E0E0E0);
+    background: var(--Neutral-grey-50, #FAFAFA);
+}
+
+.payment-box 
+{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-top 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.payment-info 
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-label 
+{
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    justify-content: center;
+    width: 80px;
+    margin-right: 8px;
+}
+
+.paid .status-label 
+{
+    background-color: #54B158;
+}
+
+.partial .status-label 
+{
+    background-color: #00A7FF;
+}
+
+.voided .status-label 
+{
+    background-color: #FF6060;
+}
+
+.amount 
+{
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+
+.invoice-btn 
+{
+    border-radius: 8px;
+    border: 1px solid var(--Neutral-grey-400, #BDBDBD);
+    color: #757575;
+    display: flex;
+    width: 110px;
+    height: 30px;
+    padding: 3px 3px 3px 2px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.payment-bottom 
+{
+    display: flex;
+    gap: 6px;
+    font-size: 14px;
+    color: #000;
+}
+
+.paid 
+{
+    border-left: 5px solid #54B158;
+}
+
+.partial 
+{
+    border-left: 5px solid #00A7FF;
+}
+
+.voided 
+{
+    border-left: 5px solid #FF6060;
+}
+
+
+/* NOTES */
+.notes 
+{
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.notes h3
+{
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.notes textarea 
+{
+  width: 100%;
+  height: 85%;
+  padding: 10px;
+  border: none;
+  background-color: #fff;
+  resize: none;
+  font-size: 14px;
+  color: #444;
+  border-radius: 4px;
+}

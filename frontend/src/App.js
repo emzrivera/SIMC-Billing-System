@@ -8,6 +8,7 @@ import MockInputPage from './pages/MockInputPage';
 import Login from './pages/Login.js';
 import Billing from './pages/Billing.js';
 import History from './pages/History.js';
+import PatientHistory from './pages/PatientHistory.js'; // added
 import InvoiceDetails from './pages/InvoiceDetails.js';
 import Meds from './pages/fetchmedicine.js';
 import Revenue from './pages/Revenue.js';
@@ -46,7 +47,10 @@ const AppLayout = () => {
             <Route path="/invoice" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />
             <Route path="/revenue" element={<ProtectedRoute> <Revenue /> </ProtectedRoute>} />
-            </Routes>
+            {/* added */}
+            <Route path="/" element={<History />} />
+            <Route path="/patient-history" element={<PatientHistory />} />
+          </Routes>
         </div>
       </div>
     </>
