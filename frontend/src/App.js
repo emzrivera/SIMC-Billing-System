@@ -10,6 +10,9 @@ import Billing from './pages/Billing.js';
 import History from './pages/History.js';
 import InvoiceDetails from './pages/InvoiceDetails.js';
 import Meds from './pages/fetchmedicine.js';
+import Revenue from './pages/Revenue.js';
+
+
 
 // Importing components
 import SideNavBar from './components/SideNavBar';
@@ -42,7 +45,8 @@ const AppLayout = () => {
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
             <Route path="/invoice" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />
-          </Routes>
+            <Route path="/revenue" element={<ProtectedRoute> <Revenue /> </ProtectedRoute>} />
+            </Routes>
         </div>
       </div>
     </>
