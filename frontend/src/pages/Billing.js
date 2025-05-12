@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom'; 
 import './Billing.css'; 
-// import TopNavBar from '../components/TopNavBar.js'; 
-// import SideNavBar from '../components/SideNavBar.js'; 
 
-import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { ReactComponent as AddIcon } from '../assets/add-icon.svg';
+import { ReactComponent as ExportIcon } from '../assets/export-icon.svg';
+import { HiOutlineDotsVertical, HiOutlineSearch  } from 'react-icons/hi';
 
 
 const Billing = () => {
   const [invoices, setInvoices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredInvoices = invoices.filter(invoice => {
+    const name = invoice.name?.toLowerCase() || '';
+    const pid = invoice.patientId?.toLowerCase() || '';
+    const id = invoice.id?.toLowerCase() || '';
+    const query = searchQuery.toLowerCase();
+    return name.includes(query) || id.includes(query) || pid.includes(query) ;
+  });
+
+  console.log('Searching:', searchQuery);
+  console.log('Filtered:', filteredInvoices.length);
+
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -50,7 +62,7 @@ const Billing = () => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case 'Unpaid' : return 'status undpaid';
+      case 'Unpaid' : return 'status unpaid';
       case 'Paid': return 'status paid';
       case 'Partial': return 'status partial';
       case 'Voided': return 'status voided';
@@ -68,25 +80,26 @@ const Billing = () => {
             <div className="stat-card blue">
               <div>
                 <p>Unpaid Invoices</p>
-                <h1>{invoices.filter(i => i.status !== 'Paid').length}</h1>
+                <span>{invoices.filter(i => i.status !== 'Paid').length}</span>
               </div>
+               <div className="divider" />
               <div>
                 <p>Outstanding Balance</p>
-                <h1>
+                <span>
                   ₱{invoices.reduce((sum, i) => sum + i.balance, 0).toLocaleString()}
-                </h1>
+                </span>
               </div>
             </div>
             <div className="stat-card gray">
               <p>Payments Today</p>
-              <h1>
+              <span>
                 ₱{invoices.reduce((sum, i) => sum + i.paid, 0).toLocaleString()}
-              </h1>
+              </span>
               <p>Collected as of now</p>
             </div>
             <div className="stat-card gray">
               <p>Pending HMO Claims</p>
-              <h1>₱42,000.00</h1>
+              <span>₱42,000.00</span>
               <p>Not yet cleared</p>
             </div>
           </div>
@@ -94,20 +107,31 @@ const Billing = () => {
           <div className="invoice-section">
             <span className="invoice-title">Invoice List</span>
             <div className="invoice-header">
-              <input type="text" placeholder="Search patient or invoice..." />
-              <div className="actions">
-                <button className="export-btn">Export CSV</button>
-                <button className="add-btn">Add Invoice</button>
+              
+             <div className="search-wrapper">
+              <HiOutlineSearch className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="Search patient or invoice..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+              
+              <div className="billing-actions">
+                {/* <button className="billing-export-btn"> <ExportIcon className="icon" /> Export CSV</button> */}
+                <button className="billing-add-btn"> <AddIcon className="icon" /> Add Invoice</button>
               </div>
             </div>
 
+            
             <table className="invoice-table">
               <thead>
                 <tr>
                   <th>Invoice No.</th>
                   <th>Patient Name</th>
                   <th>Patient ID</th>
-                  <th>Total Amount</th>
+                  {/* <th>Total Amount</th> */}
                   <th>Amount Paid</th>
                   <th>Balance Due</th>
                   <th>Status</th>
@@ -116,19 +140,19 @@ const Billing = () => {
                 </tr>
               </thead>
               <tbody>
-                {invoices.map((invoice, index) => (
+                {filteredInvoices.map((invoice, index) => (
                   <tr key={index}>
                     <td>{invoice.id}</td>
                     <td>{invoice.name}</td>
                     <td>{invoice.patientId}</td>
-                    <td>₱{invoice.total.toLocaleString()}</td>
+                    {/* <td>₱{invoice.total.toLocaleString()}</td> */}
                     <td>₱{invoice.paid.toLocaleString()}</td>
                     <td>₱{invoice.balance.toLocaleString()}</td>
                     <td><span className={getStatusClass(invoice.status)}>{invoice.status}</span></td>
                     <td>{invoice.date}</td>
-                    <td><NavLink to={`/invoice`} style={{ display: 'inline-flex', alignItems: 'center' }}>
-                  <HiOutlineDotsVertical size={20} color="#555" />
-                   </NavLink></td>
+                    <td className="icon-cell"><NavLink to={`/invoice`} style={{ display: 'inline-flex', alignItems: 'center'}}>
+                      <HiOutlineDotsVertical size={20} color="#555" />
+                      </NavLink></td>
                   </tr>
                 ))}
               </tbody>

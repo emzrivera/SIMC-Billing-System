@@ -145,7 +145,7 @@ const PatientHistory = () => {
         </div>
 
         {/* NOTES */}
-        <div className="notes">
+        <div className="history-notes">
           <h3>Notes</h3>
           <textarea placeholder="Enter notes here..."></textarea>
         </div>

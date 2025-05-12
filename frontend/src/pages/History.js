@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './History.css';
 
+import { HiOutlineSearch } from 'react-icons/hi';
+
 const getMonthFromDate = (dateStr) => {
   const options = { month: 'long' };
   const date = new Date(dateStr);
@@ -85,13 +87,13 @@ const PaymentHistory = () => {
 
         <div className="history-search-bar">
           <div className="history-search-wrapper">
+             <HiOutlineSearch className="search-icon" />
             <input
               type="text"
               placeholder="Search patient name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <img src="/history-icon-4.svg" alt="Search Icon" />
           </div>
 
           <p>Filter by</p>

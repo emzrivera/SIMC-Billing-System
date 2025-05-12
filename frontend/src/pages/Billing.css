@@ -21,6 +21,10 @@
     flex-wrap: wrap;
   }
   
+  .stats-container span{
+    font-size: 24px;
+    font-weight: bold ;
+  }
   .stat-card {
     background-color: white;
     padding: 30px;
@@ -43,12 +47,21 @@
   .stat-card.blue {
     display: flex;
     flex-direction: row;
+    flex: 1.5; 
+    width: 40%;
     border: 1px solid var(--color-primary);
     border-left: 6px solid var(--color-primary);
-    background-color: var(--color-accent);
-    gap: 50px;
+    background-color: #F2FBFF;
+    gap: 30px;
     padding: 40px;
   }
+
+  .stat-card.blue .divider {
+  width: 1px;
+  height: 50px;
+  background-color: #adb5bd; 
+      
+}
   
   .stat-card.gray {
     border: 1px solid #adb5bd;
@@ -79,95 +92,161 @@
     color: var(--color-primary);
   }
   
-  .invoice-header input[type="text"] {
+  /* .invoice-header input[type="text"] {
     padding: 15px 15px;
     border: 1px solid #ccc;
     border-radius: 6px;
     width: 340px;
     font-size: 14px;
-  }
+  } */
+
+  .search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.search-wrapper .search-icon {
+  position: absolute;
+  left: 12px;
+  color: #888;
+  pointer-events: none;
+}
+
+.search-wrapper input[type="text"] {
+  padding: 10px 12px 10px 36px; 
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 340px;
+  font-size: 14px;
+}
+
+.search-wrapper input:focus {
+  border-color: var(--color-primary); 
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1); 
+}
   
-  .actions {
+  .billing-actions {
     display: flex;
     gap: 10px;
   }
   
-  .export-btn, .add-btn {
+  .billing-export-btn, .billing-add-btn {
     padding: 10px 14px;
     border-radius: 6px;
     border: none;
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     width: 150px;
-  }
-  
-  .export-btn {
     background-color:  var(--color-secondary2);
     color: white;
   }
-  
-  .add-btn {
-    background-color: var(--color-secondary2);
-    color: white;
+
+  .billing-export-btn:hover, .billing-add-btn:hover {
+    filter: brightness(90%);
   }
+
+  .icon {
+  width: 18px;
+  height: auto;
+  margin-right: 4px;
+  vertical-align: middle;
+}
   
-  .invoice-table {
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 15px;
+  table-layout: fixed;
+}
+
+  .invoice-table thead,
+  .invoice-table tbody,
+  .invoice-table tr {
+    display: table;
     width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-    margin-top: 15px;
-  }
+    table-layout: fixed;
+}
   
   .invoice-table thead {
-    background-color: #ffffff;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    position: sticky;
+    background-color: white;
+    top: 0;
+    z-index: 1;
+  }
+
+  .invoice-table tbody {
+    display: block;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .invoice-table tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
   }
   
   .invoice-table th, .invoice-table td {
-    text-align: left;
-    padding: 20px 10px;
+    text-align: left; 
+    padding: 15px 10px; 
     border-bottom: 1px solid #eaeaea;
+    white-space: nowrap; 
+    box-sizing: border-box; 
   }
-
   .invoice-table th{
     font-size: 14px;
+    text-align: left;
   }
   
   .invoice-table td span.status {
     display: inline-flex;
-    align-items: center;
+    width: 100px;
+    height: 28px;
+    padding: 3px 6px;
     justify-content: center;
-    padding: 6px 8px;
+    align-items: center;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    min-width: 100px; 
-    text-align: center;
+    font-size: 14px;
   }
-  
-  .status.paid {
-    background-color: #54B158;
-    color: #FFFFFF;
+
+
+.invoice-table th:last-child {
+  text-align: center; 
+}
+
+.invoice-table td:last-child{
+  text-align: center; 
+}
+
+
+.status.paid {
+    background-color: #E3F9EF;
+    color: #54B158;
   }
 
   .status.unpaid {
-    background-color: #ff9800;
-    color: #FFFFFF;
+    background-color: #FFF4D5;
+    color: #EDAE00;
   }
   
   .status.partial {
-    background-color: #00A7FF;
-    color: #FFFFFF;
+    background-color: #E5F7FF;
+    color: #00A7FF;
   }
   
   .status.voided {
-    background-color: #FF6060;
-    color: #FFFFFF;
+    background-color: #FFE6E6;
+    color: #FF6060;
   }
-  
-  .pagination {
-    margin-top: 20px;
-    text-align: right;
-    color: #555;
-    font-size: 14px;
-  }
+ 
   

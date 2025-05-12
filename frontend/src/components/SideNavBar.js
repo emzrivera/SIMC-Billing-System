@@ -21,7 +21,7 @@ const SideNavBar = () => {
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to="/reports" className="nav-link">
+          <NavLink to="/revenue" className="nav-link">
             <FiTrendingUp className="nav-icon" />
             <span>Revenue Reports</span>
           </NavLink>

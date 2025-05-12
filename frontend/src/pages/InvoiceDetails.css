@@ -9,7 +9,6 @@
   .breadcrumb {
     color: #666;
     font-size: 14px;
-
   }
 
   .breadcrumb-container {
@@ -92,7 +91,7 @@
     vertical-align: middle;    
   }
 
-  .status.paid {
+  .header-right .status-paid {
     background-color: #E3F9EF;
     color: #0F9F18;
     padding: 4px 28px;
@@ -127,7 +126,6 @@
     display: flex;
     justify-content: space-between;
     margin: 30px 0 30px 0;
-    
     font-size: 14px;
   }
 
@@ -208,13 +206,13 @@
 
   .charges-table th:first-child,
 .charges-table td:first-child { 
-  padding-left: 40px; /* Optional: add more padding to the left for spacing */
+  padding-left: 40px; 
 }
 
-/* Align the last column's header and content to the center */
+
 .charges-table th:last-child,
 .charges-table td:last-child {
-  text-align: center; /* Align the last column content to the center */
+  text-align: center; 
 }
   
   /* .charges-table tbody tr:hover {
@@ -314,3 +312,17 @@
 .generate-btn:hover {
   filter: brightness(90%);
 }
+
+.edit-btn:hover
+{
+  background-color: #757575;
+  color: #ffffff;
+}
+
+.void-btn:hover
+{
+  background-color: #ff4d4f;
+  color: #ffffff;
+}
+
+

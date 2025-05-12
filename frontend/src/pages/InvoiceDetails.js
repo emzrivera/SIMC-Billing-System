@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './InvoiceDetails.css';
+import PaymentModal from '../components/PaymentModal';
 
 import {
   HiOutlinePencil,
@@ -9,6 +10,11 @@ import {
 import { FaChevronLeft, FaStethoscope, FaPills, FaBed, FaMoneyBill, FaBan  } from "react-icons/fa";
 
 const InvoiceDetails = () => {
+
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
+  const openPaymentModal = () => setIsPaymentModalOpen(true);
+  const closePaymentModal = () => setIsPaymentModalOpen(false);
 
   const SECTION_CONFIG = [
     {
@@ -27,6 +33,12 @@ const InvoiceDetails = () => {
       icon: <FaPills className="section-icon" />,
     },
   ];
+
+  const invoiceId = "INV–00987";
+  const patientName = "Anita Reyes";
+  const balanceDue = 0.00;
+  const totalPayments = 0.00;
+  const suggestedPayment = 0.00;
 
   const chargeData = {
     medical: [
@@ -60,7 +72,7 @@ const InvoiceDetails = () => {
             <div>
             <div className="header-right">
               <h1>INV–00987</h1>
-              <span className="status paid">Paid</span>
+              <span className="status-paid">Paid</span>
             </div>
             <p className="last-paid">Last Paid at 18 Apr 2025</p>
             </div>
@@ -68,7 +80,7 @@ const InvoiceDetails = () => {
             <div className="action-buttons">
               <button className="edit-btn"> < HiOutlinePencil /> Edit</button>
               <button className="void-btn"> < FaBan /> Void</button>
-              <button className="add-btn"> < FaMoneyBill /> Add Payment</button>
+              <button className="add-btn" onClick={openPaymentModal}> < FaMoneyBill /> Add Payment</button>
             </div>
           </div>
 
@@ -172,8 +184,22 @@ const InvoiceDetails = () => {
                 </div>
               </div>
             </div>
+
+            <PaymentModal
+              isOpen={isPaymentModalOpen}
+              onClose={closePaymentModal}
+              invoiceId={invoiceId}
+              patientName={patientName}
+              balanceDue={balanceDue}
+              totalPayments={totalPayments}
+              suggestedPayment={suggestedPayment}
+          />
+
       </div>
+
     </div>
+  
+    
   );
 };
 

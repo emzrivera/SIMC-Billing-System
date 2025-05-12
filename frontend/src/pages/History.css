@@ -216,14 +216,37 @@ nav .history-avatar img
 {
     font-size: 14px;
     display: inline-flex;
-    padding: 14px 10px 13px 22px;
     justify-content: flex-end;
     align-items: center;
+    padding: 10px 12px 10px 36px; 
+    border: 1px solid #ccc;
     border-radius: 6px;
-    border: 1px solid #BFBEBE;
+    width: 340px;
+    font-size: 14px;
 }
 
-.history-search-wrapper 
+ .history-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.history-search-wrapper .search-icon {
+  position: absolute;
+  left: 12px;
+  color: #888;
+  pointer-events: none;
+}
+
+.history-search-wrapper input:focus {
+  border-color: var(--color-primary); 
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1); 
+}
+
+/* .history-search-wrapper 
 {
     position: relative;
     display: inline-block;
@@ -257,7 +280,7 @@ nav .history-avatar img
     border-radius: 8px;
     border: 1px solid #BFBEBE;
     background: var(--Neutral-grey-100, #F4F4F4);
-}
+} */
 
 /* Table section */
 table 
