@@ -25,6 +25,7 @@
     font-size: 24px;
     font-weight: bold ;
   }
+
   .stat-card {
     background-color: white;
     padding: 30px;
@@ -40,10 +41,7 @@
     font-size: 14px;
   }
   
-  .stat-card h3, .stat-card h2 {
-    margin: 5px 0;
-  }
-  
+
   .stat-card.blue {
     display: flex;
     flex-direction: row;
@@ -66,7 +64,7 @@
   .stat-card.gray {
     border: 1px solid #adb5bd;
     border-left: 6px solid #adb5bd;
-    padding-left: 50px;
+    padding-left: 40px;
   }
   
   .invoice-section {
