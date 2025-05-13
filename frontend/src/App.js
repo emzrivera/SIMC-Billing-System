@@ -44,10 +44,10 @@ const AppLayout = () => {
             <Route path="/mock" element={<MockInputPage />} />
             <Route path="/meds" element={<Meds />} />
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
-            <Route path="/invoice" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
+            <Route path="/invoice/:id" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />
             <Route path="/revenue" element={<ProtectedRoute> <Revenue /> </ProtectedRoute>} />
-            <Route path="/patient-history" element={<ProtectedRoute> <PatientHistory /> </ProtectedRoute>} />
+            <Route path="/history/patient-history" element={<ProtectedRoute> <PatientHistory /> </ProtectedRoute>} />
           </Routes>
         </div>
       </div>

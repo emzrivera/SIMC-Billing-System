@@ -109,4 +109,16 @@ router.post('/', async (req, res) => {
   }
 });
 
+router:get('/:invoiceId', async (req, res) => {
+  try {
+    const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
+    if (!record) return res.status(404).json({ message: 'Invoice not found' });
+
+    res.json(record);
+  } catch (err) {
+    console.error('Failed to fetch invoice details:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
