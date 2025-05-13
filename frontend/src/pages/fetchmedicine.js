@@ -24,7 +24,7 @@ const InventoryPage = () => {
       <h2>Inventory List</h2>
       <ul>
         {inventory.map((item, index) => (
-          <li key={index}>{item.name} — Qty: {item.quantity}</li>
+          <li key={index}>{item.name} — price: {item.price}</li>
         ))}
       </ul>
     </div>

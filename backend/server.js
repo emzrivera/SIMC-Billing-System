@@ -24,27 +24,8 @@ app.post('/api/auth', (req, res) => {
   }
 });
 
-const billingRoutes = require('./routes/BillingRoutes');
-app.use('/api/billing', billingRoutes);
-
 const billingRecordRoutes = require('./routes/BillingRecordRoutes');
 app.use('/api/billing-records', billingRecordRoutes);
-
-const mockRoutes = require('./routes/mockRoutes');
-app.use('/api/mock', mockRoutes);
-
-
-app.get('/api/inventory', async (req, res) => {
-  try {
-    const response = await fetch(`${process.env.PHARMACY_API_URL}`);
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    console.error('Inventory fetch error:', error.message);
-    res.status(500).json({ message: 'Failed to fetch inventory', error: error.message });
-  }
-});
 
 app.get('/api', (req, res) => {
   res.send('API is running...');

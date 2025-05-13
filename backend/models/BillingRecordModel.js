@@ -1,17 +1,39 @@
 const mongoose = require('mongoose');
 
 const billingRecordSchema = new mongoose.Schema({
-  invoiceId: { type: String, required: true, unique: true },
-  patientName: { type: String, required: true },
-  patientId: { type: String, required: true },
-  totalAmount: { type: Number, required: true },
-  amountPaid: { type: Number, default: 0 },
-  balanceDue: { type: Number, required: true },
+  invoiceId: String,
+  patientId: String,
+  patientName: String,
+
+  medicalServices: [
+    {
+      name: String,
+      price: Number
+    }
+  ],
+
+  roomType: String,
+  roomRate: Number,
+  noOfDays: Number,
+
+  medicines: [
+    {
+      name: String,
+      quantity: Number,
+      unitPrice: Number,
+      total: Number
+    }
+  ],
+
+  totalAmount: Number,
+  amountPaid: Number,
+  balanceDue: Number,
   status: {
     type: String,
-    enum: ['Paid', 'Partial', 'Unpaid', 'Voided'],
+    enum: ['Unpaid', 'Partial', 'Paid'],
     default: 'Unpaid'
   },
+
   invoiceDate: { type: Date, default: Date.now }
 });
 
