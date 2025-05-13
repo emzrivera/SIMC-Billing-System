@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './History.css';
-
 import { HiOutlineSearch } from 'react-icons/hi';
 
 const getMonthFromDate = (dateStr) => {
@@ -11,83 +10,69 @@ const getMonthFromDate = (dateStr) => {
 };
 
 const PaymentHistory = () => {
-  const [paymentData, setPaymentData] = useState([]);
-  const [availableMonths, setAvailableMonths] = useState([]);
+    const [paymentData, setPaymentData] = useState([]);
+    const [availableMonths, setAvailableMonths] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterMethod, setFilterMethod] = useState('All');
-  const [filterStatus, setFilterStatus] = useState('All');
-  const [filterDate, setFilterDate] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterMethod, setFilterMethod] = useState('All');
+    const [filterStatus, setFilterStatus] = useState('All');
+    const [filterDate, setFilterDate] = useState('All');
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchData = async () => {
-      const data = [
-        {
-          name: 'Anita Reyes',
-          id: 'IPT-2038',
-          balance: '₱3,100.00',
-          paid: '₱1,000.00',
-          method: 'Cash',
-          status: 'Voided',
-          date: 'Apr 18, 2025',
-        },
-        {
-          name: 'Allan Soriano',
-          id: 'IPT-4067',
-          balance: '₱3,100.00',
-          paid: '₱1,000.00',
-          method: 'Cash',
-          status: 'Partial',
-          date: 'Apr 18, 2025',
-        },
-        {
-          name: 'Alex Great',
-          id: 'IPT-3092',
-          balance: '₱3,100.00',
-          paid: '₱1,000.00',
-          method: 'Online',
-          status: 'Paid',
-          date: 'Jan 10, 2025',
-        },
-        {
-          name: 'Alexa Rose Yu',
-          id: 'IPT-3092',
-          balance: '₱3,100.00',
-          paid: '₱1,000.00',
-          method: 'Bank Transfer',
-          status: 'Paid',
-          date: 'Feb 28, 2025',
-        },
-      ];
+    try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/payment-records`);
+    const data = await res.json();
 
-      setPaymentData(data);
+    const formatted = data.map((p) => ({
+      name: p.patientName,
+      id: p.patientId,
+      paid: `₱${p.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+      balance: `₱${p.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+      method: p.method || 'Cash',
+      status: getPaymentStatus(p.balance),
+      date: new Date(p.paymentDate).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+      }),
+      rawDate: p.paymentDate,
+    }));
 
-      const months = [...new Set(data.map((item) => getMonthFromDate(item.date)))];
-      setAvailableMonths(months);
-    };
+    setPaymentData(formatted);
 
-    fetchData();
-  }, []);
+    const months = [...new Set(formatted.map(item => getMonthFromDate(item.rawDate)))];
+    setAvailableMonths(months);
+    } catch (err) {
+    console.error('Error fetching payment history:', err);
+    }
+  };
 
-  const filteredData = paymentData.filter((payment) => {
-    const matchesSearch = payment.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesMethod = filterMethod === 'All' || payment.method === filterMethod;
-    const matchesStatus = filterStatus === 'All' || payment.status === filterStatus;
-    const matchesDate =
-      filterDate === 'All' ||
-      getMonthFromDate(payment.date).toLowerCase() === filterDate.toLowerCase();
+  fetchData();
+}, []);
 
-    return matchesSearch && matchesMethod && matchesStatus && matchesDate;
-  });
+const getPaymentStatus = (balance) => {
+  if (balance <= 0) return 'Paid';
+  if (balance > 0) return 'Partial';
+  return 'Unknown';
+};
+
+const filteredData = paymentData.filter((payment) => {
+  const matchesSearch = payment.name.toLowerCase().includes(searchTerm.toLowerCase());
+  const matchesMethod = filterMethod === 'All' || payment.method === filterMethod;
+  const matchesStatus = filterStatus === 'All' || payment.status === filterStatus;
+  const matchesDate =
+  filterDate === 'All' ||
+  getMonthFromDate(payment.rawDate).toLowerCase() === filterDate.toLowerCase();
+  return matchesSearch && matchesMethod && matchesStatus && matchesDate;
+});
 
   return (
     <div className="history-layout-wrapper">
-      <main className="history-main-content">
-        <h2 className="history-title">Payment History</h2>
+    <main className="history-main-content">
+    <h2 className="history-title">Payment History</h2>
 
         <div className="history-search-bar">
           <div className="history-search-wrapper">
-             <HiOutlineSearch className="search-icon" />
+            <HiOutlineSearch className="search-icon" />
             <input
               type="text"
               placeholder="Search patient name"
@@ -101,8 +86,7 @@ const PaymentHistory = () => {
           <select value={filterMethod} onChange={(e) => setFilterMethod(e.target.value)}>
             <option value="All">Payment (All)</option>
             <option value="Cash">Cash</option>
-            <option value="Online">Online</option>
-            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Card">Card</option>
           </select>
 
           <select value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
@@ -153,7 +137,9 @@ const PaymentHistory = () => {
                   </td>
                   <td>{payment.date}</td>
                   <td className="history-view">
-                    <Link to="/history/patient-history" state={{ patient: payment }}>View History → </Link>
+                    <Link to="/history/patient-history" state={{ patient: payment }}>
+                      View History →
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -171,7 +157,7 @@ const PaymentHistory = () => {
         </div>
       </main>
     </div>
-  );
+    );
 };
 
 export default PaymentHistory;
