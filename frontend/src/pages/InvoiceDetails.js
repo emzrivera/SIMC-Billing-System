@@ -67,7 +67,7 @@ const InvoiceDetails = () => {
   };
 
   const totalAmount = invoice?.totalAmount || 0;
-  const discountRate = (invoice?.patientDiscount === 'Senior Citizen' || invoice?.patientDiscount === 'PWD') ? 0.20 : 0;
+  const discountRate = (invoice?.patientDiscount === 'Senior' || invoice?.patientDiscount === 'PWD') ? 0.20 : 0;
   const discountAmount = totalAmount * discountRate;
   const amountAfterDiscount = totalAmount - discountAmount;
   const balanceDue = amountAfterDiscount - (invoice?.amountPaid || 0 );

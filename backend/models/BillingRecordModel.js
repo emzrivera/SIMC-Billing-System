@@ -7,7 +7,7 @@ const billingRecordSchema = new mongoose.Schema({
 
   patientDiscount: {
     type: String,
-    enum: ['Regular, Senior Citizen, PWD'],
+    enum: ['Regular', 'Senior', 'PWD'],
     default: 'Regular'
   },
 
