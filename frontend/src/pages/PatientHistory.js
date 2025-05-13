@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './PatientHistory.css';
 import { FiArrowLeftCircle } from 'react-icons/fi';
 
@@ -54,19 +54,26 @@ const mockPaymentsDB = {
 
 const PatientHistory = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const patient = location.state?.patient;
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     if (patient?.id) {
-      const fetchedPayments = mockPaymentsDB[patient.id] || [];
-      setPayments(fetchedPayments);
+      const fetchPayments = async () => {
+        try {
+          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/payment-records?patientId=${patient.id}`);
+          const data = await res.json();
+          setPayments(data);
+        } catch (err) {
+          console.error('Failed to fetch payment history', err);
+        }
+      };
+      fetchPayments();
     }
   }, [patient]);
 
-  if (!patient) {
-    return <p style={{ padding: '2rem' }}>No patient data provided.</p>;
-  }
+  if (!patient) return <p style={{ padding: '2rem' }}>No patient data provided.</p>;
 
   return (
     <div className="container">
@@ -76,16 +83,9 @@ const PatientHistory = () => {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              window.history.back();
+              navigate(-1); // go back
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              color: '#0077B6',
-              textDecoration: 'none',
-              fontWeight: '700',
-            }}
+            className="back-link"
           >
             <FiArrowLeftCircle size={20} />
             Payment History
@@ -95,7 +95,6 @@ const PatientHistory = () => {
         </nav>
       </header>
 
-      {/* PROFILE */}
       <div className="profile">
         <div className="avatar">
           <img src="/patient-avatar.svg" alt="avatar" />
@@ -112,23 +111,23 @@ const PatientHistory = () => {
         <div className="payment-history">
           {payments.length > 0 ? (
             payments.map((payment, index) => (
-              <div key={index} className={`payment-item ${payment.className}`}>
+              <div key={index} className={`payment-item ${payment.status?.toLowerCase() || ''}`}>
                 <div className="payment-box">
                   <div className="payment-top">
                     <div className="payment-info">
-                      <span className={`status-label ${payment.className}`}>
-                        {payment.status}
-                      </span>
-                      <span className="amount">{payment.amount}</span>
+                      {/* <span className={`status-label ${payment.status?.toLowerCase() || ''}`}>
+                        {payment.status || '—'}
+                      </span> */}
+                      <span className="amount">₱{(payment.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
-                    <button className="invoice-btn" onClick={() => {}}>
+                    <button className="invoice-btn" onClick={() => navigate(`/invoice/${payment.invoiceId}`)}>
                       View Invoice
                     </button>
                   </div>
                   <div className="payment-bottom">
-                    <span>{payment.date}</span>
+                    <span>{new Date(payment.paymentDate).toLocaleDateString()}</span>
                     <span>|</span>
-                    <span>{payment.invoice}</span>
+                    <span>{payment.invoiceId}</span>
                     {payment.method && (
                       <>
                         <span>|</span>
@@ -144,7 +143,6 @@ const PatientHistory = () => {
           )}
         </div>
 
-        {/* NOTES */}
         <div className="history-notes">
           <h3>Notes</h3>
           <textarea placeholder="Enter notes here..."></textarea>
