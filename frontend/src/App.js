@@ -4,21 +4,16 @@ import { Routes, Route, BrowserRouter, useLocation } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Importing pages
-import MockInputPage from './pages/MockInputPage';
 import Login from './pages/Login.js';
 import Billing from './pages/Billing.js';
 import History from './pages/History.js';
 import PatientHistory from './pages/PatientHistory.js'; // added
 import InvoiceDetails from './pages/InvoiceDetails.js';
-import Meds from './pages/fetchmedicine.js';
 import Revenue from './pages/Revenue.js';
-
-
 
 // Importing components
 import SideNavBar from './components/SideNavBar';
 import TopNavBar from './components/TopNavBar';
-
 
 const AppLayout = () => {
   const location = useLocation();
@@ -41,8 +36,6 @@ const AppLayout = () => {
         <div style={{ marginLeft: '300px', padding: '20px', flex: 1 }}>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/mock" element={<MockInputPage />} />
-            <Route path="/meds" element={<Meds />} />
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
             <Route path="/invoice/:id" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />
