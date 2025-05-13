@@ -27,14 +27,13 @@ const handleSubmitPayment = async () => {
 
 
 try {
-  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/payments`, {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/payment-records`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       invoiceId,
       amount: parseFloat(amount),
       method,
-      note
     })
   });
 
