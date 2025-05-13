@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import './Billing.css'; 
 
 import { ReactComponent as AddIcon } from '../assets/add-icon.svg';
-import { ReactComponent as ExportIcon } from '../assets/export-icon.svg';
 import { HiOutlineDotsVertical, HiOutlineSearch  } from 'react-icons/hi';
 
 
@@ -150,7 +149,7 @@ const Billing = () => {
                     <td>₱{invoice.balance.toLocaleString()}</td>
                     <td><span className={getStatusClass(invoice.status)}>{invoice.status}</span></td>
                     <td>{invoice.date}</td>
-                    <td className="icon-cell"><NavLink to={`/invoice`} style={{ display: 'inline-flex', alignItems: 'center'}}>
+                    <td className="icon-cell"><NavLink to={`/invoice/${invoice.id}`} style={{ display: 'inline-flex', alignItems: 'center'}}>
                       <HiOutlineDotsVertical size={20} color="#555" />
                       </NavLink></td>
                   </tr>

@@ -99,6 +99,33 @@
     font-size: 14px;
     font-weight: 600;
   }
+  .header-right .status-unpaid {
+    background-color: #FFF4D5;
+    color: #EDAE00;
+    padding: 4px 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .header-right .status-partial {
+    background-color: #E3F9EF;
+    color: #00A7FF;
+    padding: 4px 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .header-right .status-voided {
+    background-color: #FFF4D5;
+    color: #FF6060;
+    padding: 4px 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
   
   .last-paid {
     font-size: 13px;
