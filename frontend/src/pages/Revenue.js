@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 import './Revenue.css';
 
-import { FaArrowUp, FaHeart  } from 'react-icons/fa';
+import { FaArrowUp, FaHeart } from 'react-icons/fa';
 
 const Revenue = () => {
   const [selectedRange, setSelectedRange] = useState('This Month');
@@ -13,6 +13,7 @@ const Revenue = () => {
     hmoCharges: 35000000,
     discounts: 10000000,
     summary: [
+      { date: '2025-04-04', billed: 300100, paid: 300100, discount: 3100 },
       { date: '2025-04-03', billed: 300100, paid: 300100, discount: 3100 },
       { date: '2025-04-02', billed: 300100, paid: 300100, discount: 3100 },
       { date: '2025-04-01', billed: 300100, paid: 300100, discount: 3100 },

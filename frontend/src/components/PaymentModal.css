@@ -105,7 +105,7 @@
     justify-content: space-between;  
     align-items: center;
     cursor: pointer;
-    border: 1px solid #ccc;   
+    border: 1px solid #DDDDDD;   
     font-size: 14px;
     font-weight: 600;
   }
@@ -153,15 +153,15 @@
     width: 100%;
     padding: 8px 10px;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid #DDDDDD;
     border-radius: 8px;
     color: var(--color-text);
   }
 
   .input-group input:focus {
-    border-color: var(--color-text); 
-    outline: none;        
-    box-shadow: 0 0 0 2px var(--color-accent); 
+    border-color: var(--color-primary); 
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1); 
   }
   
   .modal-actions {

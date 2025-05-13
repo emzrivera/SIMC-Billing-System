@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom'; 
 import './Billing.css'; 
+import AddInvoiceModal from '../components/AddInvModal';
 
 import { ReactComponent as AddIcon } from '../assets/add-icon.svg';
 import { HiOutlineDotsVertical, HiOutlineSearch  } from 'react-icons/hi';
@@ -69,6 +70,8 @@ const Billing = () => {
     }
   };
 
+  const [showAddModal, setShowAddModal] = useState(false);
+
   return (
     <div>
 
@@ -119,7 +122,7 @@ const Billing = () => {
               
               <div className="billing-actions">
                 {/* <button className="billing-export-btn"> <ExportIcon className="icon" /> Export CSV</button> */}
-                <button className="billing-add-btn"> <AddIcon className="icon" /> Add Invoice</button>
+                <button className="billing-add-btn" onClick={() => setShowAddModal(true)}> <AddIcon className="icon" /> Add Invoice</button>
               </div>
             </div>
 
@@ -159,6 +162,8 @@ const Billing = () => {
           </div>
         </div>
       </div>
+
+      {showAddModal && <AddInvoiceModal onClose={() => setShowAddModal(false)} />}
     </div>
   );
 };
