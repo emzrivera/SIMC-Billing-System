@@ -32,6 +32,7 @@ const billingRecordSchema = new mongoose.Schema({
   ],
 
   totalAmount: Number,
+  discountAmount: Number,
   amountPaid: Number,
   balanceDue: Number,
   status: {
