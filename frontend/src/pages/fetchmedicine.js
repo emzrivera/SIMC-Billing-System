@@ -5,7 +5,7 @@ const InventoryPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`) // or your deployed URL
+    fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`)
       .then(res => res.json())
       .then(data => {
         setInventory(data);

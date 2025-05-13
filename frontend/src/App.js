@@ -47,9 +47,7 @@ const AppLayout = () => {
             <Route path="/invoice" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />
             <Route path="/revenue" element={<ProtectedRoute> <Revenue /> </ProtectedRoute>} />
-            {/* added */}
-            <Route path="/" element={<History />} />
-            <Route path="/patient-history" element={<PatientHistory />} />
+            <Route path="/patient-history" element={<ProtectedRoute> <PatientHistory /> </ProtectedRoute>} />
           </Routes>
         </div>
       </div>
