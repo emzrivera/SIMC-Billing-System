@@ -48,4 +48,16 @@ router.post('/', async (req, res) => {
 });
 
 
+router.get('/:invoiceId', async (req, res) => {
+  const { patientId } = req.query;
+  try {
+    const payments = await PaymentRecord.find(patientId ? { patientId } : {});
+    res.json(payments);
+  } catch (err) {
+    console.error('Failed to fetch payment history:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 module.exports = router;
