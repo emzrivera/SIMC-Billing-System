@@ -21,6 +21,10 @@ router.post('/', async (req, res) => {
         const billing = await BillingRecord.findOne({ invoiceId });
         if (!billing) return res.status(404).json({ message: 'Invoice not found'});
 
+        billing.amountPaid += amount;
+        billing.balanceDue = Math.max(billing.totalAmount - billing.discountAmount - billing.amountPaid, 0);
+        billing.status = billing.balanceDue === 0 ? 'Paid' : 'Partial';
+
         const payment = new PaymentRecord({
             invoiceId,
             patientId: billing.patientId,
@@ -30,13 +34,8 @@ router.post('/', async (req, res) => {
             balance: billing.balanceDue,
             paymentDate: new Date()
         });
+        
         await payment.save();
-
-        billing.amountPaid += amount;
-        billing.balanceDue = Math.max(billing.totalAmount - billing.discountAmount - billing.amountPaid, 0);
-
-        billing.status = billing.balanceDue === 0 ? 'Paid' : 'Partial';
-
         await billing.save();
 
         res.status(201).json({ message: 'Payment recorded and invoice updated', payment });
