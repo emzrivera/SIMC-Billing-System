@@ -146,9 +146,9 @@ const InvoiceDetails = () => {
                     {(chargeData[key] || []).map((item, index) => (
                       <tr key={index} className="charge-row">
                         <td>{item.name}</td>
-                        <td>₱{item.unitPrice.toFixed(2)}</td>
+                        <td>₱{item.unitPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td>x{item.quantity} {item.unit || ""}</td>
-                        <td>₱{(item.unitPrice * item.quantity).toFixed(2)}</td>
+                        <td>₱{(item.unitPrice * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                       </tr>
                     ))}
                   </React.Fragment>

@@ -27,6 +27,9 @@ app.post('/api/auth', (req, res) => {
 const billingRecordRoutes = require('./routes/BillingRecordRoutes');
 app.use('/api/billing-records', billingRecordRoutes);
 
+const paymentRecordRoutes = require('./routes/PaymentRecordRoute');
+app.use('/api/payment-records', paymentRecordRoutes);
+
 app.get('/api', (req, res) => {
   res.send('API is running...');
 });
