@@ -81,6 +81,10 @@ router.post('/', async (req, res) => {
     });
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
+    const patientStatus = patient?.status || 'Regular';
+    const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
+    const discountAmount = totalAmount * discountRate;
+    const balanceDue = totalAmount - discountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -97,8 +101,9 @@ router.post('/', async (req, res) => {
       noOfDays,
       medicines: formattedMeds,
       totalAmount,
+      discountAmount,
       amountPaid: 0,
-      balanceDue: totalAmount,
+      balanceDue,
       status: 'Unpaid',
       invoiceDate: new Date()
     });

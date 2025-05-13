@@ -39,8 +39,6 @@ const InvoiceDetails = () => {
     fetchInvoice();
   }, [id]);
 
-  
-
   const SECTION_CONFIG = [
     { key: "medical", label: "Medical Services", icon: <FaStethoscope className="section-icon" /> },
     { key: "room", label: "Room Charge", icon: <FaBed className="section-icon" /> },
@@ -67,10 +65,8 @@ const InvoiceDetails = () => {
   };
 
   const totalAmount = invoice?.totalAmount || 0;
-  const discountRate = (invoice?.patientDiscount === 'Senior' || invoice?.patientDiscount === 'PWD') ? 0.20 : 0;
-  const discountAmount = totalAmount * discountRate;
-  const amountAfterDiscount = totalAmount - discountAmount;
-  const balanceDue = amountAfterDiscount - (invoice?.amountPaid || 0 );
+  const discountAmount = invoice?.discountAmount || 0;
+  const balanceDue = invoice?.balanceDue || 0;
 
   return (
     <div className="invoice-details-page">
@@ -175,9 +171,9 @@ const InvoiceDetails = () => {
                 <span>₱{totalAmount.toLocaleString()}</span>
               </div>
 
-              {discountRate > 0 && (
+              {discountAmount > 0 && (
                 <div className="summary-row">
-                  <span>Discount <span className="badge">{invoice.patientDiscount}</span></span>
+                  <span> Discount <span className="badge">{invoice?.patientDiscount || 'None'}</span> </span>
                   <span>– ₱{discountAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
@@ -189,7 +185,7 @@ const InvoiceDetails = () => {
 
               <div className="summary-row total-remaining">
                 <strong>Total Remaining Payable</strong>
-                <strong>₱{invoice?.balanceDue?.toLocaleString()}</strong>
+                <strong>₱{balanceDue.toLocaleString()}</strong>
               </div>
 
               <button className="generate-btn">Generate Receipt</button>

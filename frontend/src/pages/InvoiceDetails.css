@@ -196,7 +196,7 @@
 
   .charges-table thead th {
     font-size: 12px;
-    font-weight: normal; 
+    font-weight: BOLD; 
   }
   
   .charges-table .section {
@@ -307,7 +307,7 @@
   }
   
   .badge {
-    background-color: #F8F8F8;
+    background-color: #dadada;
     color: var(--color-text);
     padding: 2px 6px;
     border-radius: 4px;
