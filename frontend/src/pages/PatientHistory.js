@@ -3,6 +3,55 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './PatientHistory.css';
 import { FiArrowLeftCircle } from 'react-icons/fi';
 
+const mockPaymentsDB = {
+  'IPT-2038': [
+    {
+      amount: '₱ 50,780.98',
+      status: 'Paid',
+      date: '04/18/2025',
+      invoice: 'INV-0987',
+      method: 'Bank Transfer',
+      className: 'paid-badge',
+    },
+    {
+      amount: '₱ 2,100.00',
+      status: 'Voided',
+      date: '04/15/2025',
+      invoice: 'INV-0799',
+      method: 'Online',
+      className: 'voided-badge',
+    },
+  ],
+  'IPT-4067': [
+    {
+      amount: '₱ 10,000.00',
+      status: 'Partial',
+      date: '04/17/2025',
+      invoice: 'INV-0867',
+      method: 'Cash',
+      className: 'partial-badge',
+    },
+  ],
+  'IPT-3092': [
+    {
+      amount: '₱ 3,100.00',
+      status: 'Paid',
+      date: '01/10/2025',
+      invoice: 'INV-1102',
+      method: 'Online',
+      className: 'paid-badge',
+    },
+    {
+      amount: '₱ 1,000.00',
+      status: 'Paid',
+      date: '02/28/2025',
+      invoice: 'INV-1133',
+      method: 'Bank Transfer',
+      className: 'paid-badge',
+    },
+  ],
+};
+
 const PatientHistory = () => {
   const location = useLocation();
   const navigate = useNavigate();

@@ -183,7 +183,7 @@
 
   .invoice-table tbody {
     display: block;
-    max-height: 200px;
+    max-height: 350px;
     overflow-y: auto;
     width: 100%;
   }
@@ -227,7 +227,7 @@
 }
 
 
-.status.paid {
+  .status.paid {
     background-color: #E3F9EF;
     color: #54B158;
   }
