@@ -1,107 +1,163 @@
-import React, {useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AddInvModal.css';
-
 import { HiOutlineTrash } from 'react-icons/hi';
-import { FaChevronLeft, FaStethoscope, FaPills, FaBed, FaMoneyBill, FaBan } from 'react-icons/fa';
+import { FaStethoscope, FaPills, FaBed } from 'react-icons/fa';
 import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
 
+const AddInvoiceModal = ({ onClose }) => {
+  const [patientId, setPatientId] = useState('');
+  const [patientName, setPatientName] = useState('');
+  const [medicalServices, setMedicalServices] = useState(['']);
+  const [roomCharge, setRoomCharge] = useState({ type: '', days: 0 });
+  const [medicines, setMedicines] = useState([{ name: '', quantity: 1, price: 0 }]);
+  const [inventory, setInventory] = useState([]);
+  const [patients, setPatients] = useState([]);
 
-    const AddInvoiceModal = ({ onClose }) => {
-      const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI'];
-      const roomOptions = ['Private', 'Semi-Private', 'Ward', 'Private'];
-      const medicineOptions = ['Paracetamol', 'Ibuprofen', 'Celecoxib', 'Amoxicillin'];
+  const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI'];
+  const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
 
-      const [medicalServices, setMedicalServices] = useState(['']);
-      const [roomCharge, setRoomCharge] = useState({ type: 'Select Room', days: 0 });
-      const [medicines, setMedicines] = useState([{ name: 'Select Medicine', qty: 0 }]);
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`);
+        const data = await res.json();
+        setInventory(data);
+      } catch (err) {
+        console.error('Failed to fetch inventory');
+      }
+    };
 
-      const handleServiceChange = (value, index) => {
-        const updated = [...medicalServices];
-        updated[index] = value;
-        setMedicalServices(updated);
-      };
+    const fetchPatients = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`);
+        const data = await res.json();
+        setPatients(data);
+      } catch (err) {
+        console.error('Failed to fetch patients');
+      }
+    };
 
-      const addService = () => setMedicalServices([...medicalServices, '']);
-      const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
+    fetchInventory();
+    fetchPatients();
+  }, []);
 
-      const handleMedicineChange = (index, field, value) => {
-        const updated = [...medicines];
-        updated[index][field] = value;
-        setMedicines(updated);
-      };
+  useEffect(() => {
+    const matched = patients.find(p => p.patientId === patientId);
+    if (matched) {
+      setPatientName(`${matched.firstName} ${matched.lastName}`);
+    } else {
+      setPatientName('');
+    }
+  }, [patientId, patients]);
 
-      const addMedicine = () => setMedicines([...medicines, { type: 'Paracetamol', days: 1 }]);
-      const removeMedicine = (index) => setMedicines(medicines.filter((_, i) => i !== index));
+  const handleServiceChange = (value, index) => {
+    const updated = [...medicalServices];
+    updated[index] = value;
+    setMedicalServices(updated);
+  };
 
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        const invoiceData = {
-          medicalServices,
-          roomCharge,
-          medicines,
-        };
-        console.log('Submitting Invoice:', invoiceData);
-        onClose();
-      };
+  const addService = () => setMedicalServices([...medicalServices, '']);
+  const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
 
+  const handleMedicineChange = (index, field, value) => {
+    const updated = [...medicines];
+    updated[index][field] = value;
 
-    return (
-      <div className="modal-backdrop">
-        <div className="add-inv-modal">
-          <div className="modal-header">
-            <div className="title">
-              <span className="modal-title">Add Invoice</span>
-              <span className="invoice-info">INV-</span>
-              </div>
-              <button onClick={onClose}>×</button>
-            
+    if (field === 'name') {
+      const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
+      updated[index].price = match ? match.price : 0;
+    }
+
+    setMedicines(updated);
+  };
+
+  const addMedicine = () => setMedicines([...medicines, { name: '', quantity: 1, price: 0 }]);
+  const removeMedicine = (index) => setMedicines(medicines.filter((_, i) => i !== index));
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const payload = {
+      patientId,
+      roomType: roomCharge.type,
+      noOfDays: parseInt(roomCharge.days),
+      medicalServices: medicalServices.filter(s => s.trim() !== ''),
+      medicines: medicines.map(m => ({
+        name: m.name.trim(),
+        quantity: parseInt(m.quantity),
+        unitPrice: m.price
+      }))
+    };
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      alert(data.message || 'Invoice created');
+      onClose();
+    } catch (err) {
+      alert('Failed to submit invoice');
+      console.error(err);
+    }
+  };
+
+  return (
+    <div className="modal-backdrop">
+      <div className="add-inv-modal">
+        <div className="modal-header">
+          <div className="title">
+            <span className="modal-title">Add Invoice</span>
+            {patientName && <span className="invoice-info">({patientName})</span>}
           </div>
-          <hr className="line-separator" />
-  
-          <form onSubmit={handleSubmit} className="modal-form">
-          
+          <button onClick={onClose}>×</button>
+        </div>
+        <hr className="line-separator" />
+
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="patient-id">
             <label>Patient ID</label>
-            <input type="text" placeholder="PID -" />
+            <select value={patientId} onChange={(e) => setPatientId(e.target.value)} required>
+              <option value="">Select Patient</option>
+              {patients.map(p => (
+                <option key={p.patientId} value={p.patientId}>
+                  {p.patientId} – {p.firstName} {p.lastName}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Medical Services */}
           <section>
             <h4><FaStethoscope className="section-icon" /> Medical Services</h4>
             {medicalServices.map((service, idx) => (
               <div className="input-row" key={idx}>
-                <select
-                  value={service}
-                  onChange={(e) => handleServiceChange(e.target.value, idx)}
-                >
+                <select value={service} onChange={(e) => handleServiceChange(e.target.value, idx)}>
                   <option value="">Select Service</option>
-                  {serviceOptions.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
+                  {serviceOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
-                <button type="button" className="delete-btn" onClick={() => removeService(idx)}><HiOutlineTrash className="icon" /> </button>
+                <button type="button" className="delete-btn" onClick={() => removeService(idx)}><HiOutlineTrash /></button>
               </div>
             ))}
             <button type="button" className="add-btn" onClick={addService}><AddIcon className="icon" /> Add Item</button>
           </section>
 
-          {/* Room Charge */}
           <section>
-            <h4><FaBed className="section-icon" />Room Charge</h4>
+            <h4><FaBed className="section-icon" /> Room Charge</h4>
             <div className="input-row">
-
               <div className="room-type">
-                 <label>Type</label>
+                <label>Type</label>
                 <select
                   value={roomCharge.type}
                   onChange={(e) => setRoomCharge({ ...roomCharge, type: e.target.value })}
+                  required
                 >
-                  {roomOptions.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
+                  <option value="">Select Room</option>
+                  {roomOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
               </div>
-              
               <div className="days">
                 <label>No. of Days</label>
                 <input
@@ -109,46 +165,45 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
                   min="1"
                   value={roomCharge.days}
                   onChange={(e) => setRoomCharge({ ...roomCharge, days: Number(e.target.value) })}
+                  required
                 />
               </div>
             </div>
           </section>
 
-          {/* Medicines */}
           <section>
             <h4><FaPills className="section-icon" /> Medicine</h4>
             {medicines.map((med, idx) => (
               <div className="input-row" key={idx}>
-
                 <div className="med-name">
-                <label>Name</label>
-                <select
-                  value={med.type}
-                  onChange={(e) => handleMedicineChange(idx, 'name', e.target.value)}
-                >
-                  {medicineOptions.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
+                  <label>Name</label>
+                  <select
+                    value={med.name}
+                    onChange={(e) => handleMedicineChange(idx, 'name', e.target.value)}
+                    required
+                  >
+                    <option value="">Select Medicine</option>
+                    {inventory.map(m => (
+                      <option key={m.name} value={m.name}>{m.name}</option>
+                    ))}
+                  </select>
                 </div>
-
                 <div className="quantity">
-                <label>Qty</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={med.qty}
-                  onChange={(e) => handleMedicineChange(idx, 'qty', Number(e.target.value))}
-                />
+                  <label>Qty</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={med.quantity}
+                    onChange={(e) => handleMedicineChange(idx, 'quantity', e.target.value)}
+                    required
+                  />
                 </div>
-
-                <button type="button" className="delete-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash className="icon" /> </button>
+                <button type="button" className="delete-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash /></button>
               </div>
             ))}
             <button type="button" className="add-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
           </section>
 
-          {/* Action Buttons */}
           <div className="modal-actions">
             <button type="submit" className="submit-btn">Submit Invoice</button>
             <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
