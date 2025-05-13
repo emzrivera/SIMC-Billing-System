@@ -48,16 +48,18 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
     return (
       <div className="modal-backdrop">
         <div className="add-inv-modal">
+
+          <div className="modal-header-wrapper">
           <div className="modal-header">
             <div className="title">
               <span className="modal-title">Add Invoice</span>
               <span className="invoice-info">INV-</span>
               </div>
-              <button onClick={onClose}>×</button>
-            
+              <button onClick={onClose}>×</button>  
           </div>
           <hr className="line-separator" />
-  
+        </div>
+        
           <form onSubmit={handleSubmit} className="modal-form">
           
           <div className="patient-id">
@@ -79,10 +81,10 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-                <button type="button" className="delete-btn" onClick={() => removeService(idx)}><HiOutlineTrash className="icon" /> </button>
+                <button type="button" className="delete-item-btn" onClick={() => removeService(idx)}><HiOutlineTrash className="icon" /> </button>
               </div>
             ))}
-            <button type="button" className="add-btn" onClick={addService}><AddIcon className="icon" /> Add Item</button>
+            <button type="button" className="add-item-btn" onClick={addService}><AddIcon className="icon" /> Add Item</button>
           </section>
 
           {/* Room Charge */}
@@ -117,11 +119,15 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
           {/* Medicines */}
           <section>
             <h4><FaPills className="section-icon" /> Medicine</h4>
+
+              <div className="med-header">
+                 <label className="name">Name</label>
+                 <label className="qty">Qty</label>
+              </div>
+
             {medicines.map((med, idx) => (
               <div className="input-row" key={idx}>
 
-                <div className="med-name">
-                <label>Name</label>
                 <select
                   value={med.type}
                   onChange={(e) => handleMedicineChange(idx, 'name', e.target.value)}
@@ -130,22 +136,18 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
                     <option key={opt} value={opt}>{opt}</option>
                   ))}
                 </select>
-                </div>
-
-                <div className="quantity">
-                <label>Qty</label>
+                             
                 <input
                   type="number"
                   min="1"
                   value={med.qty}
                   onChange={(e) => handleMedicineChange(idx, 'qty', Number(e.target.value))}
                 />
-                </div>
 
-                <button type="button" className="delete-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash className="icon" /> </button>
+                <button type="button" className="delete-item-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash className="icon" /> </button>
               </div>
             ))}
-            <button type="button" className="add-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
+            <button type="button" className="add-item-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
           </section>
 
           {/* Action Buttons */}
