@@ -25,7 +25,7 @@ const PaymentHistory = () => {
         {
           name: 'Anita Reyes',
           id: 'IPT-2038',
-          total: '₱3,100.00',
+          balance: '₱3,100.00',
           paid: '₱1,000.00',
           method: 'Cash',
           status: 'Voided',
@@ -34,7 +34,7 @@ const PaymentHistory = () => {
         {
           name: 'Allan Soriano',
           id: 'IPT-4067',
-          total: '₱3,100.00',
+          balance: '₱3,100.00',
           paid: '₱1,000.00',
           method: 'Cash',
           status: 'Partial',
@@ -43,7 +43,7 @@ const PaymentHistory = () => {
         {
           name: 'Alex Great',
           id: 'IPT-3092',
-          total: '₱3,100.00',
+          balance: '₱3,100.00',
           paid: '₱1,000.00',
           method: 'Online',
           status: 'Paid',
@@ -52,7 +52,7 @@ const PaymentHistory = () => {
         {
           name: 'Alexa Rose Yu',
           id: 'IPT-3092',
-          total: '₱3,100.00',
+          balance: '₱3,100.00',
           paid: '₱1,000.00',
           method: 'Bank Transfer',
           status: 'Paid',
@@ -130,8 +130,8 @@ const PaymentHistory = () => {
               <tr>
                 <th>Patient Name</th>
                 <th>Patient ID</th>
-                <th>Total Amount</th>
                 <th>Amount Paid</th>
+                <th>Balance Due</th>
                 <th>Payment Method</th>
                 <th>Status</th>
                 <th>Payment Date</th>
@@ -143,8 +143,8 @@ const PaymentHistory = () => {
                 <tr key={index}>
                   <td>{payment.name}</td>
                   <td>{payment.id}</td>
-                  <td>{payment.total}</td>
                   <td>{payment.paid}</td>
+                  <td>{payment.balance}</td>
                   <td>{payment.method}</td>
                   <td>
                     <div className={`history-table-${payment.status.toLowerCase()}`}>
@@ -153,7 +153,7 @@ const PaymentHistory = () => {
                   </td>
                   <td>{payment.date}</td>
                   <td className="history-view">
-                    <Link to="/patient-history" state={{ patient: payment }}>View History → </Link>
+                    <Link to="/history/patient-history" state={{ patient: payment }}>View History → </Link>
                   </td>
                 </tr>
               ))}

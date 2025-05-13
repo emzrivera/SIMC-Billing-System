@@ -46,6 +46,7 @@ router.post('/', async (req, res) => {
     const patients = await patientRes.json();
     const patient = patients.find(p => p.patientId === patientId);
     const patientName = patient ? `${patient.firstName} ${patient.lastName}` : 'Unknown';
+    const patientDiscount = patient?.status || 'Regular';
 
     // fetch pharmacy inventory
     const inventoryRes = await fetch(`${process.env.PHARMACY_API_URL}`);
@@ -80,6 +81,10 @@ router.post('/', async (req, res) => {
     });
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
+    const patientStatus = patient?.status || 'Regular';
+    const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
+    const discountAmount = totalAmount * discountRate;
+    const balanceDue = totalAmount - discountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -89,14 +94,16 @@ router.post('/', async (req, res) => {
       invoiceId,
       patientId,
       patientName,
+      patientDiscount,
       medicalServices: formattedServices,
       roomType,
       roomRate,
       noOfDays,
       medicines: formattedMeds,
       totalAmount,
+      discountAmount,
       amountPaid: 0,
-      balanceDue: totalAmount,
+      balanceDue,
       status: 'Unpaid',
       invoiceDate: new Date()
     });

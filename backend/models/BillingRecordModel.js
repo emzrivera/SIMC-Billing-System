@@ -5,6 +5,12 @@ const billingRecordSchema = new mongoose.Schema({
   patientId: String,
   patientName: String,
 
+  patientDiscount: {
+    type: String,
+    enum: ['Regular', 'Senior', 'PWD'],
+    default: 'Regular'
+  },
+
   medicalServices: [
     {
       name: String,
@@ -26,6 +32,7 @@ const billingRecordSchema = new mongoose.Schema({
   ],
 
   totalAmount: Number,
+  discountAmount: Number,
   amountPaid: Number,
   balanceDue: Number,
   status: {

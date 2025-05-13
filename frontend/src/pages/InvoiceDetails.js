@@ -65,6 +65,8 @@ const InvoiceDetails = () => {
   };
 
   const totalAmount = invoice?.totalAmount || 0;
+  const discountAmount = invoice?.discountAmount || 0;
+  const balanceDue = invoice?.balanceDue || 0;
 
   return (
     <div className="invoice-details-page">
@@ -144,9 +146,9 @@ const InvoiceDetails = () => {
                     {(chargeData[key] || []).map((item, index) => (
                       <tr key={index} className="charge-row">
                         <td>{item.name}</td>
-                        <td>₱{item.unitPrice.toFixed(2)}</td>
+                        <td>₱{item.unitPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td>x{item.quantity} {item.unit || ""}</td>
-                        <td>₱{(item.unitPrice * item.quantity).toFixed(2)}</td>
+                        <td>₱{(item.unitPrice * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                       </tr>
                     ))}
                   </React.Fragment>
@@ -169,9 +171,21 @@ const InvoiceDetails = () => {
                 <span>₱{totalAmount.toLocaleString()}</span>
               </div>
 
+              {discountAmount > 0 && (
+                <div className="summary-row">
+                  <span> Discount <span className="badge">{invoice?.patientDiscount || 'None'}</span> </span>
+                  <span>– ₱{discountAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                </div>
+              )}
+
+              <div className="summary-row">
+                <span>Amount Paid</span>
+                <span>– ₱{(invoice?.amountPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              </div>
+
               <div className="summary-row total-remaining">
                 <strong>Total Remaining Payable</strong>
-                <strong>₱{invoice?.balanceDue?.toLocaleString()}</strong>
+                <strong>₱{balanceDue.toLocaleString()}</strong>
               </div>
 
               <button className="generate-btn">Generate Receipt</button>
