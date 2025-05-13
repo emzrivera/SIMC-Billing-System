@@ -11,6 +11,8 @@ const paymentSchema = new mongoose.Schema({
         enum: ['Cash', 'Card'],
         default: 'Cash'
     },
+    
+    balance: Number,
 
     paymentDate: { type: Date, default: Date.now }
 });

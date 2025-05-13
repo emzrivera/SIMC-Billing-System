@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
             patientName: billing.patientName,
             amount,
             method,
+            balance: billing.balanceDue,
             paymentDate: new Date()
         });
         await payment.save();
