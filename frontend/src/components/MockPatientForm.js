@@ -15,7 +15,7 @@ const AddInvoice = () => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await fetch(`${process.env.PHARMACY_API_URL}`);
+        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`);
         const data = await res.json();
         setInventory(data);
       } catch (err) {
