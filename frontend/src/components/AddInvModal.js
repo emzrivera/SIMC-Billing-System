@@ -7,8 +7,8 @@ import { ReactComponent as AddIcon } from '../assets/add-icon-blue.svg';
 
 
     const AddInvoiceModal = ({ onClose }) => {
-      const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI', 'Celecoxib'];
-      const roomOptions = ['Private', 'Semi-Private', 'Ward', 'ICU'];
+      const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI'];
+      const roomOptions = ['Private', 'Semi-Private', 'Ward', 'Private'];
       const medicineOptions = ['Paracetamol', 'Ibuprofen', 'Celecoxib', 'Amoxicillin'];
 
       const [medicalServices, setMedicalServices] = useState(['']);
