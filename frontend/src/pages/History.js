@@ -147,14 +147,14 @@ const filteredData = paymentData.filter((payment) => {
           </table>
         )}
 
-        <div className="history-pagination">
+        {/* <div className="history-pagination">
           <span className="page-arrow">&lt;</span>
           <span className="page-number active">1</span>
           <span className="page-number">2</span>
           <span className="page-number">3</span>
           <span className="page-number">4</span>
           <span className="page-arrow">&gt;</span>
-        </div>
+        </div> */}
       </main>
     </div>
     );

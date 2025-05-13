@@ -16,14 +16,22 @@
     border-radius: 12px;
     width: 500px;
     height: 650px;
-    padding: 24px;
+    padding: 0 24px 24px 24px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.2s ease-in-out;
     overflow-y: auto; 
     scrollbar-width: none; 
   }
+
+  .modal-header-wrapper{
+    position: sticky;
+    top: 0;
+    background-color: white; 
+    z-index: 10;
+    width: 100%;
+    padding-top: 24px;
+  }
   
-  /* .mmodal-header-wrapper{}
   .modal-header {
     display: flex;
     justify-content: space-between;
@@ -31,7 +39,7 @@
     margin-bottom: 16px;
     margin-left: 14px;
     margin-right: 14px;
-  } */
+  }
   
   .modal-header .modal-title {
     font-weight: 300;
