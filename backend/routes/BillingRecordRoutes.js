@@ -46,6 +46,7 @@ router.post('/', async (req, res) => {
     const patients = await patientRes.json();
     const patient = patients.find(p => p.patientId === patientId);
     const patientName = patient ? `${patient.firstName} ${patient.lastName}` : 'Unknown';
+    const patientDiscount = patient?.status || 'Regular';
 
     // fetch pharmacy inventory
     const inventoryRes = await fetch(`${process.env.PHARMACY_API_URL}`);
@@ -89,6 +90,7 @@ router.post('/', async (req, res) => {
       invoiceId,
       patientId,
       patientName,
+      patientDiscount,
       medicalServices: formattedServices,
       roomType,
       roomRate,
