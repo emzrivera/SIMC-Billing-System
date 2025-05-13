@@ -3,6 +3,17 @@ const router = express.Router();
 const PaymentRecord = require('../models/PaymentRecordModel');
 const BillingRecord = require('../models/BillingRecordModel');
 
+router.get('/', async (req, res) => {
+    try {
+        const records = await 
+        PaymentRecord.find();
+        res.json(records);
+    } catch (err) {
+        console.error('Failed to fetch payment records:', err);
+        res.status(500).json({ message: 'Server error' })
+    }
+});
+
 router.post('/', async (req, res) => {
     const { invoiceId, amount, method } = req.body;
 
@@ -34,5 +45,6 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 module.exports = router;
