@@ -23,6 +23,7 @@
     scrollbar-width: none; 
   }
   
+  /* .mmodal-header-wrapper{}
   .modal-header {
     display: flex;
     justify-content: space-between;
@@ -30,7 +31,7 @@
     margin-bottom: 16px;
     margin-left: 14px;
     margin-right: 14px;
-  }
+  } */
   
   .modal-header .modal-title {
     font-weight: 300;
@@ -103,6 +104,15 @@
   margin-bottom: 8px;
 }
 
+.med-header{
+  display: flex;
+  gap: 20px;
+}
+
+.med-header .name{
+    width: 250px;
+}
+
 .input-row input, .input-row select  {
   font-size: 14px;
   background-color: #ffff;
@@ -127,12 +137,13 @@ label{
 }
 
 
-.add-btn {
+.add-item-btn {
   background: none;
   border: none;
   color: var(--color-secondary2);
   cursor: pointer;
   margin-left: 0;
+  font-weight: 600;
 }
 
 .modal-actions {
@@ -160,7 +171,7 @@ label{
   cursor: pointer;
 }
 
- .delete-btn {
+ .delete-item-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -170,7 +181,7 @@ label{
 }
 
 /* Apply size directly to the icon */
-.delete-btn .icon {
+.delete-item-btn .icon {
   color: #dddd;
   font-size: 30px; 
   width: 100%;  

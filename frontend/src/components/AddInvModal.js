@@ -138,10 +138,10 @@ const AddInvoiceModal = ({ onClose }) => {
                   <option value="">Select Service</option>
                   {serviceOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
-                <button type="button" className="delete-btn" onClick={() => removeService(idx)}><HiOutlineTrash /></button>
+                <button type="button" className="delete-item-btn" onClick={() => removeService(idx)}><HiOutlineTrash className="icon" /> </button>
               </div>
             ))}
-            <button type="button" className="add-btn" onClick={addService}><AddIcon className="icon" /> Add Item</button>
+            <button type="button" className="add-item-btn" onClick={addService}><AddIcon className="icon" /> Add Item</button>
           </section>
 
           <section>
@@ -173,6 +173,7 @@ const AddInvoiceModal = ({ onClose }) => {
 
           <section>
             <h4><FaPills className="section-icon" /> Medicine</h4>
+
             {medicines.map((med, idx) => (
               <div className="input-row" key={idx}>
                 <div className="med-name">
@@ -198,10 +199,10 @@ const AddInvoiceModal = ({ onClose }) => {
                     required
                   />
                 </div>
-                <button type="button" className="delete-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash /></button>
+                <button type="button" className="delete-item-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash className="icon" /> </button>
               </div>
             ))}
-            <button type="button" className="add-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
+            <button type="button" className="add-item-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
           </section>
 
           <div className="modal-actions">
