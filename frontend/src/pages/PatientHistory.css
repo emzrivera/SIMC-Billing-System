@@ -228,17 +228,17 @@ nav p
     color: #000;
 }
 
-.paid 
+.paid-badge 
 {
     border-left: 5px solid #54B158;
 }
 
-.partial 
+.partial-badge 
 {
     border-left: 5px solid #00A7FF;
 }
 
-.voided 
+.voided-badge
 {
     border-left: 5px solid #FF6060;
 }

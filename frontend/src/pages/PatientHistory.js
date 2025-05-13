@@ -11,7 +11,7 @@ const mockPaymentsDB = {
       date: '04/18/2025',
       invoice: 'INV-0987',
       method: 'Bank Transfer',
-      className: 'paid',
+      className: 'paid-badge',
     },
     {
       amount: '₱ 2,100.00',
@@ -19,7 +19,7 @@ const mockPaymentsDB = {
       date: '04/15/2025',
       invoice: 'INV-0799',
       method: 'Online',
-      className: 'voided',
+      className: 'voided-badge',
     },
   ],
   'IPT-4067': [
@@ -29,7 +29,7 @@ const mockPaymentsDB = {
       date: '04/17/2025',
       invoice: 'INV-0867',
       method: 'Cash',
-      className: 'partial',
+      className: 'partial-badge',
     },
   ],
   'IPT-3092': [
@@ -39,7 +39,7 @@ const mockPaymentsDB = {
       date: '01/10/2025',
       invoice: 'INV-1102',
       method: 'Online',
-      className: 'paid',
+      className: 'paid-badge',
     },
     {
       amount: '₱ 1,000.00',
@@ -47,7 +47,7 @@ const mockPaymentsDB = {
       date: '02/28/2025',
       invoice: 'INV-1133',
       method: 'Bank Transfer',
-      className: 'paid',
+      className: 'paid-badge',
     },
   ],
 };
