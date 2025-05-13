@@ -10,7 +10,7 @@ import History from './pages/History.js';
 import PatientHistory from './pages/PatientHistory.js'; // added
 import InvoiceDetails from './pages/InvoiceDetails.js';
 import Revenue from './pages/Revenue.js';
-
+import Mockpage from './pages/mockimputform.js';
 // Importing components
 import SideNavBar from './components/SideNavBar';
 import TopNavBar from './components/TopNavBar';
@@ -36,6 +36,7 @@ const AppLayout = () => {
         <div style={{ marginLeft: '300px', padding: '20px', flex: 1 }}>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/mock" element={<Mockpage />} />
             <Route path="/billing" element={<ProtectedRoute> <Billing /> </ProtectedRoute>} />
             <Route path="/invoice/:id" element={<ProtectedRoute> <InvoiceDetails /> </ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute> <History /> </ProtectedRoute>} />

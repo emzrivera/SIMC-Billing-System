@@ -19,7 +19,7 @@ const AddInvoiceModal = ({ onClose }) => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`);
+        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`); 
         const data = await res.json();
         setInventory(data);
       } catch (err) {
@@ -29,7 +29,7 @@ const AddInvoiceModal = ({ onClose }) => {
 
     const fetchPatients = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/proxy`); //change when grant access
         const data = await res.json();
         setPatients(data);
       } catch (err) {
@@ -124,7 +124,8 @@ const AddInvoiceModal = ({ onClose }) => {
               <option value="">Select Patient</option>
               {patients.map(p => (
                 <option key={p.patientId} value={p.patientId}>
-                  {p.patientId} – {p.firstName} {p.lastName}
+                  {p.patientId}
+                   {/* – {p.firstName} {p.lastName} */}
                 </option>
               ))}
             </select>
