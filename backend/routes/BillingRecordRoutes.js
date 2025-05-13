@@ -82,8 +82,9 @@ router.post('/', async (req, res) => {
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
 
     // generate invoice id
-    const count = 0;
-    const invoiceId = `INV-${String(count + 1).padStart(4, '0')}`;
+    let count = 1;
+    const invoiceId = `INV-${String(count).padStart(4, '0')}`;
+    count++;
 
     const record = new BillingRecord({
       invoiceId,
