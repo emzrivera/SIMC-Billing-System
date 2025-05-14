@@ -133,7 +133,7 @@ const Billing = () => {
                   <th>Invoice No.</th>
                   <th>Patient Name</th>
                   <th>Patient ID</th>
-                  {/* <th>Total Amount</th> */}
+                  <th>Total Amount</th>
                   <th>Amount Paid</th>
                   <th>Balance Due</th>
                   <th>Status</th>
@@ -154,7 +154,7 @@ const Billing = () => {
                     <td>{invoice.id}</td>
                     <td>{invoice.name}</td>
                     <td>{invoice.patientId}</td>
-                    {/* <td>₱{invoice.total.toLocaleString()}</td> */}
+                    <td>₱{invoice.total.toLocaleString()}</td>
                     <td>₱{invoice.paid.toLocaleString()}</td>
                     <td>₱{invoice.balance.toLocaleString()}</td>
                     <td><span className={getStatusClass(invoice.status)}>{invoice.status}</span></td>
