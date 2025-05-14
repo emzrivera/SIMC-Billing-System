@@ -30,17 +30,18 @@ router.get('/', async (req, res) => {
   }
 });
 
-//remove when grant access
-router.get('/proxy', async (req, res) => {
-try {
-const response = await fetch(process.env.PATIENT_API_URL);
-const data = await response.json();
-res.json(data);
-} catch (err) {
-console.error('Proxy fetch error:', err.message);
-res.status(500).json({ message: 'Error fetching patient data' });
-}
-});
+// //remove when grant access
+// router.get('/proxy', async (req, res) => {
+// try {
+// const response = await fetch(process.env.PATIENT_API_URL);
+// const data = await response.json();
+// res.json(data);
+// } catch (err) {
+// console.error('Proxy fetch error:', err.message);
+// res.status(500).json({ message: 'Error fetching patient data' });
+// }
+// });
+
 // POST route to receive and compute invoice
 router.post('/', async (req, res) => {
   try {

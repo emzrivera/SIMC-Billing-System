@@ -29,7 +29,7 @@ const AddInvoiceModal = ({ onClose }) => {
 
     const fetchPatients = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/proxy`); //change when grant access
+        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`); //change when grant access
         const data = await res.json();
         setPatients(data);
       } catch (err) {
