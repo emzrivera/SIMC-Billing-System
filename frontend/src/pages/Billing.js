@@ -142,7 +142,14 @@ const Billing = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredInvoices.map((invoice, index) => (
+              {filteredInvoices.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="no-records-found">
+                    No records found.
+                  </td>
+                </tr>
+              ) : (
+                filteredInvoices.map((invoice, index) => (
                   <tr key={index}>
                     <td>{invoice.id}</td>
                     <td>{invoice.name}</td>
@@ -152,12 +159,15 @@ const Billing = () => {
                     <td>₱{invoice.balance.toLocaleString()}</td>
                     <td><span className={getStatusClass(invoice.status)}>{invoice.status}</span></td>
                     <td>{invoice.date}</td>
-                    <td className="icon-cell"><NavLink to={`/invoice/${invoice.id}`} style={{ display: 'inline-flex', alignItems: 'center'}}>
-                      <HiOutlineDotsVertical size={20} color="#555" />
-                      </NavLink></td>
+                    <td className="icon-cell">
+                      <NavLink to={`/invoice/${invoice.id}`} style={{ display: 'inline-flex', alignItems: 'center'}}>
+                        <HiOutlineDotsVertical size={20} color="#555" />
+                      </NavLink>
+                    </td>
                   </tr>
-                ))}
-              </tbody>
+                ))
+              )}
+            </tbody>
             </table>
           </div>
         </div>
