@@ -99,6 +99,7 @@ const AddInvoiceModal = ({ onClose }) => {
       const data = await res.json();
       alert(data.message || 'Invoice created');
       onClose();
+      window.location.reload();
     } catch (err) {
       alert('Failed to submit invoice');
       console.error(err);
