@@ -16,7 +16,7 @@
     border-radius: 12px;
     width: 500px;
     height: 650px;
-    padding: 0 24px 24px 24px;
+    padding: 24px 24px 24px 24px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.2s ease-in-out;
     overflow-y: auto; 
@@ -41,9 +41,10 @@
     margin-right: 14px;
   }
   
-  .modal-header .modal-title {
-    font-weight: 300;
-  }
+.modal-header .add-inv-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+}
   
   .modal-header .invoice-info {
     font-weight: 600;
@@ -69,41 +70,45 @@
   }
 
   .modal-form section {
-    margin: 40px 0;
+    margin: 25px 0;
   } 
+
+  .modal-form select {
+    color: #494949;
+  }
 
   .modal-form h4{
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 12px;
-    padding: 12px;
+    margin-bottom: 10px;
+    padding: 10px;
     background-color: #FAFAFA;
     border-radius: 8px 8px 0 0  ;
     border-bottom: 1px solid #dddd;
   } 
 
   .modal-form .section-icon{
-    margin-right: 6px;
+    margin-right: 8px;
     font-size: 15px;
     margin-left: 8px;
   } 
 
-  .modal-form .patient-id {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: fit-content;
-    color: var(--color-lighttext);
-    font-size: 12px;
+  .patient-id label, .patient-id select {
+    display: block;
   }
 
-  .patient-id input{
-    font-size: 14px;
-    background-color: #ffff;
-    border: 1px solid #e0e0e0;
-    padding: 12px;
-    border-radius: 8px;
-    width: 100%;
+  .patient-id input, .patient-id select{
+  font-size: 14px;
+  background-color: #ffff;
+  border: 1px solid #e0e0e0;
+  padding: 8px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 4px;
+  }
+
+.patient-id input {
+    width: 60px;
   }
 
 .input-row {
@@ -125,10 +130,10 @@
   font-size: 14px;
   background-color: #ffff;
   border: 1px solid #e0e0e0;
-  padding: 12px;
+  padding: 8px;
   border-radius: 8px;
   width: 100%;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .input-row select {

@@ -6,10 +6,10 @@ const fetch = require('node-fetch');
 // services and rooms pricing
 const servicePriceMap = {
   'consultation': 1000,
-  'laboratory': 1000,
   'x-ray': 800,
   'surgery': 50000,
-  'ct scan': 3000
+  'MRI': 3000,
+  'blood test': 1000,
 };
 
 const roomRateMap = {

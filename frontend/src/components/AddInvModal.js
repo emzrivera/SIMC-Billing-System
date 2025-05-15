@@ -13,7 +13,7 @@ const AddInvoiceModal = ({ onClose }) => {
   const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
 
-  const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI'];
+  const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI', 'Surgery'];
   const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
 
   useEffect(() => {
@@ -109,10 +109,8 @@ const AddInvoiceModal = ({ onClose }) => {
     <div className="modal-backdrop">
       <div className="add-inv-modal">
         <div className="modal-header">
-          <div className="title">
-            <span className="modal-title">Add Invoice</span>
+            <span className='add-inv-title'>Add Invoice</span>
             {patientName && <span className="invoice-info">({patientName})</span>}
-          </div>
           <button onClick={onClose}>×</button>
         </div>
         <hr className="line-separator" />
