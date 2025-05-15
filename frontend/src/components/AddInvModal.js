@@ -123,7 +123,7 @@ const AddInvoiceModal = ({ onClose }) => {
               {patients.map(p => (
                 <option key={p.patientId} value={p.patientId}>
                   {p.patientId}
-                   {/* – {p.firstName} {p.lastName} */}
+                  – {p.firstName} {p.lastName}
                 </option>
               ))}
             </select>
