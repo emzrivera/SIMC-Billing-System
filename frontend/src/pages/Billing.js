@@ -99,11 +99,11 @@ const Billing = () => {
               </span>
               <p>Collected as of now</p>
             </div>
-            <div className="stat-card gray">
+            /* <div className="stat-card gray">
               <p>Pending HMO Claims</p>
               <span>₱42,000.00</span>
               <p>Not yet cleared</p>
-            </div>
+            </div> */
           </div>
 
           <div className="invoice-section">
