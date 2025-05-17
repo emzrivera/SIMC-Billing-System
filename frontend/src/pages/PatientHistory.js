@@ -52,6 +52,13 @@ const mockPaymentsDB = {
   ],
 };
 
+const getPaymentStatus = (balance) => {
+  if (balance === 0) return 'Paid';
+  if (balance > 0) return 'Partial';
+  if (balance < 0) return 'Voided'; 
+  return 'Unknown';
+};
+
 const PatientHistory = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -110,39 +117,47 @@ const PatientHistory = () => {
       <div className="main-section">
         <div className="payment-history">
           {payments.length > 0 ? (
-            payments.map((payment, index) => (
-              <div key={index} className={`payment-item ${payment.status?.toLowerCase() || ''}`}>
-                <div className="payment-box">
-                  <div className="payment-top">
-                    <div className="payment-info">
-                      {/* <span className={`status-label ${payment.status?.toLowerCase() || ''}`}>
-                        {payment.status || '—'}
-                      </span> */}
-                      <span className="amount">₱{(payment.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+            payments.map((payment, index) => {
+              const status = getPaymentStatus(payment.balance); 
+              return (
+                <div key={index} className={`payment-item ${status.toLowerCase()}`}>
+                  <div className="payment-box">
+                    <div className="payment-top">
+                      <div className="payment-info">
+                        <span className={`status-label ${status.toLowerCase()}`}>
+                          {status}
+                        </span>
+                        <span className="amount">
+                          ₱{(payment.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </span>
+                      </div>
+                      <button
+                        className="invoice-btn"
+                        onClick={() => navigate(`/invoice/${payment.invoiceId}`)}
+                      >
+                        View Invoice
+                      </button>
                     </div>
-                    <button className="invoice-btn" onClick={() => navigate(`/invoice/${payment.invoiceId}`)}>
-                      View Invoice
-                    </button>
-                  </div>
-                  <div className="payment-bottom">
-                    <span>{new Date(payment.paymentDate).toLocaleDateString()}</span>
-                    <span>|</span>
-                    <span>{payment.invoiceId}</span>
-                    {payment.method && (
-                      <>
-                        <span>|</span>
-                        <span>{payment.method}</span>
-                      </>
-                    )}
+                    <div className="payment-bottom">
+                      <span>{new Date(payment.paymentDate).toLocaleDateString()}</span>
+                      <span>|</span>
+                      <span>{payment.invoiceId}</span>
+                      {payment.method && (
+                        <>
+                          <span>|</span>
+                          <span>{payment.method}</span>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p>No transactions found for this patient.</p>
           )}
         </div>
-
+          
         <div className="history-notes">
           <h3>Notes</h3>
           <textarea placeholder="Enter notes here..."></textarea>
