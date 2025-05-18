@@ -45,26 +45,29 @@ const InvoiceDetails = () => {
       if (!invoice?.patientId) return;
 
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/hmo/${invoice.patientId}`);
-        const hmo = await res.json();
+        const res = await fetch(`${process.env.REACT_APP_HMO_API_URL}`);
+        const hmoData = await res.json();
 
-        if (hmo?.discount) {
+        const patientHmo = hmoData.find(entry => entry.patientId === invoice.patientId);
+
+        if (patientHmo?.discount) {
           const afterPatientDiscount = (invoice.totalAmount || 0) - (invoice.discountAmount || 0);
-          const discount = afterPatientDiscount * (hmo.discount / 100);
+          const discount = afterPatientDiscount * (patientHmo.discount / 100);
 
           setHmoInfo({
-            provider: hmo.name,
-            percentage: hmo.discount,
+            provider: patientHmo.name,
+            percentage: patientHmo.discount,
             discount
           });
         }
       } catch (err) {
-        console.error('Error fetching HMO info:', err);
+        console.error('Error fetching HMO info directly from frontend:', err);
       }
     };
 
     fetchHmoInfo();
   }, [invoice]);
+
 
   const SECTION_CONFIG = [
     { key: "medical", label: "Medical Services", icon: <FaStethoscope className="section-icon" /> },
