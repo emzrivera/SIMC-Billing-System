@@ -19,6 +19,16 @@ const roomRateMap = {
   'ward': 500
 };
 
+router.get('/', async (req, res) => {
+  try {
+    const records = await BillingRecord.find().sort({ invoiceDate: -1 });
+    res.json(records);
+  } catch (err) {
+    console.error('Failed to fetch billing records:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Create a billing record
 router.post('/', async (req, res) => {
   try {
@@ -116,6 +126,17 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.error('Failed to create invoice:', err);
     res.status(500).json({ message: 'Server error during invoice creation' });
+  }
+});
+
+router.get('/:invoiceId', async (req, res) => {
+  try {
+    const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
+    if (!record) return res.status(404).json({ message: 'Invoice not found' });
+    res.json(record);
+  } catch (err) {
+    console.error('Failed to fetch invoice details:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
