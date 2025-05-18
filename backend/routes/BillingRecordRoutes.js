@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create a billing record
+// Create a billing record
 router.post('/', async (req, res) => {
   try {
     const {
@@ -99,7 +100,6 @@ router.post('/', async (req, res) => {
       };
     }
 
-
     const balanceDue = afterPatientDiscount - discountAmount;
 
     // generate invoice id
@@ -116,7 +116,7 @@ router.post('/', async (req, res) => {
       noOfDays,
       medicines: formattedMeds,
       patientDiscount,
-      hmoInfo,
+      hmoInfo,  // Store HMO info here
       totalAmount,
       discountAmount,
       amountPaid: 0,
@@ -132,7 +132,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Server error during invoice creation' });
   }
 });
-
 
 router.get('/:invoiceId', async (req, res) => {
   try {
