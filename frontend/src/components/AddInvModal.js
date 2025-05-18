@@ -10,7 +10,7 @@ const AddInvoiceModal = ({ onClose }) => {
   const [medicalServices, setMedicalServices] = useState(['']);
   const [roomCharge, setRoomCharge] = useState({ type: '', days: 0 });
   const [medicines, setMedicines] = useState([{ name: '', quantity: 1, price: 0 }]);
-  const [inventory, setInventory] = useState([]);
+  // const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
 
@@ -18,15 +18,15 @@ const AddInvoiceModal = ({ onClose }) => {
   const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`); 
-        const data = await res.json();
-        setInventory(data);
-      } catch (err) {
-        console.error('Failed to fetch inventory');
-      }
-    };
+    // const fetchInventory = async () => {
+    //   try {
+    //     const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`); 
+    //     const data = await res.json();
+    //     setInventory(data);
+    //   } catch (err) {
+    //     console.error('Failed to fetch inventory');
+    //   }
+    // };
 
     const fetchPatients = async () => {
       try {
@@ -45,11 +45,11 @@ const AddInvoiceModal = ({ onClose }) => {
         setPrescriptions(data.data);
       } catch (err) {
         console.error('Failed to fetch prescriptions');
-        setPrescriptions([]); // fallback to empty array
+        // setPrescriptions([]); // fallback to empty array
       }
     };
 
-    fetchInventory();
+    // fetchInventory();
     fetchPatients();
     fetchPrescriptions();
   }, []);
@@ -62,17 +62,6 @@ const AddInvoiceModal = ({ onClose }) => {
 
   const addService = () => setMedicalServices([...medicalServices, '']);
   const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
-
-  // const handleMedicineChange = (index, field, value) => {
-  //   const updated = [...medicines];
-  //   updated[index][field] = value;
-
-  //   if (field === 'name') {
-  //     const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
-  //     updated[index].price = match ? match.price : 0;
-  //   }
-  //   setMedicines(updated);
-  // };
 
   useEffect(() => {
     const matched = patients.find(p => p.patientId === patientId);
@@ -122,7 +111,7 @@ const AddInvoiceModal = ({ onClose }) => {
       onClose();
       window.location.reload();
     } catch (err) {
-      alert('Failed to submit invoice');
+      alert('Failed to submit invoice:', err.stack || err);
       console.error(err);
     }
   };
@@ -197,15 +186,15 @@ const AddInvoiceModal = ({ onClose }) => {
             {prescriptions
               .filter(p => p.patientId === patientId)
               .flatMap((prescription) =>
-                prescription.inscription.map((item, idx) => (
+                prescription.inscription.map((med, idx) => (
                   <div className="input-row" key={`${prescription._id}-${idx}`}>
                     <div className="med-name">
                       <label>Medicine</label>
-                      <input type="text" value={item.name} readOnly />
+                      <input type="text" value={med.name} readOnly />
                     </div>
                     <div className="quantity">
                       <label>Qty</label>
-                      <input type="number" value={item.quantity} readOnly />
+                      <input type="number" value={med.quantity} readOnly />
                     </div>
                   </div>
                 ))
