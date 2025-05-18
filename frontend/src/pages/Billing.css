@@ -248,3 +248,27 @@
   }
  
   
+
+  .billing-filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.billing-filters select {
+  padding: 0.2rem 1rem 0.2rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 12px;
+  background-color: white;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.billing-filters select:hover,
+.billing-filters select:focus  {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
+}

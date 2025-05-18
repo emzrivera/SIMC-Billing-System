@@ -17,6 +17,7 @@
     height: auto; 
   }
   
+
   .top-nav .right-section {
     display: flex;
     align-items: center;
@@ -28,7 +29,7 @@
     color: var(--color-text);
   }
   
- .active-link {
+ .settings-icon {
     margin-top: 5px;
     font-size: 25px;
     cursor: pointer;
@@ -36,7 +37,7 @@
     transition: color 0.2s ease;
   }
   
-  .active-link:hover {
+  .settings-icon:hover {
     color: var(--color-primary);
   }
   

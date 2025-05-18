@@ -316,18 +316,23 @@ th, td
 
 .history-table-voided 
 {
-    background: #FF6060;
+   background-color: #FFE6E6;
+    color: #FF6060;
 }
 
 .history-table-partial 
 {
-    background: #00A7FF;
+    background-color: #E5F7FF;
+    color: #00A7FF;
 }
 
 .history-table-paid 
 {
-    background: #54B158;
+   background-color: #E3F9EF;
+    color: #54B158;
 }
+
+
 
 .history-view a
 {
@@ -371,4 +376,50 @@ th, td
 .history-pagination span:hover 
 {
   background-color: #E5F7FF;
+}
+
+.search-and-filters {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.search-and-filters {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.search-and-filters p{
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+.history-search-bar select {
+  padding: 0.2rem 1rem 0.2rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 12px;
+  background-color: white;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+
+  
+}
+
+/* Hover and focus states for select */
+.history-search-bar select:hover,
+.history-search-bar select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Label text before filters */
+.history-search-bar p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
 }

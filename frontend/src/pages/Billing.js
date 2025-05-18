@@ -10,12 +10,22 @@ import { HiOutlineDotsVertical, HiOutlineSearch  } from 'react-icons/hi';
 const Billing = () => {
   const [invoices, setInvoices] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [filterMonth, setFilterMonth] = useState('All');
+  const [availableMonths, setAvailableMonths] = useState([]);
+
   const filteredInvoices = invoices.filter(invoice => {
     const name = invoice.name?.toLowerCase() || '';
     const pid = invoice.patientId?.toLowerCase() || '';
     const id = invoice.id?.toLowerCase() || '';
     const query = searchQuery.toLowerCase();
-    return name.includes(query) || id.includes(query) || pid.includes(query) ;
+
+    const matchesQuery = name.includes(query) || id.includes(query) || pid.includes(query);
+    const matchesStatus = filterStatus === 'All' || invoice.status === filterStatus;
+    const invoiceMonth = new Date(invoice.date).toLocaleDateString('en-US', { month: 'long' });
+    const matchesMonth = filterMonth === 'All' || invoiceMonth === filterMonth;
+
+    return matchesQuery && matchesStatus && matchesMonth;
   });
 
   console.log('Searching:', searchQuery);
@@ -32,7 +42,7 @@ const Billing = () => {
           const total = record.totalAmount ?? 0;
           const paid = record.amountPaid ?? 0;
           const balance = record.balanceDue ?? 0;
-          const invoiceId = record.invoiceId || `INV-${String(index + 1).padStart(4, '0')}`;
+          const invoiceId = record.invoiceId || `INV-${String(index + 1).padStart(4, '0')}`;  
   
           return {
             id: invoiceId,
@@ -51,6 +61,14 @@ const Billing = () => {
         });
   
         setInvoices(fetched);
+
+        const months = [...new Set(fetched.map(item => {
+        const date = new Date(item.date);
+        return date.toLocaleDateString('en-US', { month: 'long' });
+      }))];
+      setAvailableMonths(months);
+
+
       } catch (err) {
         console.error('Failed to fetch billing data:', err);
       }
@@ -110,15 +128,36 @@ const Billing = () => {
             <span className="invoice-title">Invoice List</span>
             <div className="invoice-header">
               
-             <div className="search-wrapper">
-              <HiOutlineSearch className="search-icon" />
-              <input 
-                type="text" 
-                placeholder="Search patient or invoice..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="search-and-filters">
+              <div className="search-wrapper">
+                <HiOutlineSearch className="search-icon" />
+                <input 
+                  type="text" 
+                  placeholder="Search patient or invoice..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+
+              <div className="billing-filters">
+                <p> Filter by</p>
+              <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                <option value="All">Status (All)</option>
+                <option value="Unpaid">Unpaid</option>
+                <option value="Paid">Paid</option>
+                <option value="Partial">Partial</option>
+                <option value="Voided">Voided</option>
+              </select>
+
+              <select value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)}>
+                <option value="All">Month (All)</option>
+                {availableMonths.map((month, idx) => (
+                  <option key={idx} value={month}>{month}</option>
+                ))}
+              </select>
             </div>
+             
+             </div>
               
               <div className="billing-actions">
                 {/* <button className="billing-export-btn"> <ExportIcon className="icon" /> Export CSV</button> */}

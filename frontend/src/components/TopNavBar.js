@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'; 
+import { useNavigate  } from 'react-router-dom'; 
 import '../components/TopNavBar.css';
 import { HiOutlineLogout } from 'react-icons/hi';
 import ignatiusLogo from '../assets/ignatiuslogo.svg'; // adjust path as needed
 
 const TopNavBar = () => {
         const [currentTime, setCurrentTime] = useState(new Date());
+        const navigate = useNavigate();
+
+        const handleLogout = () => {
+          navigate('/'); 
+        };
+
       
         useEffect(() => {
           const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -33,12 +39,9 @@ const TopNavBar = () => {
       <div className="right-section">
       <div className="date">{date}</div>
       <div className="time">{time}</div>
-        <div className="settings-icon">
-        <NavLink
-  to="/billing"
-  className={({ isActive }) => (isActive ? 'active-link' : '')}
-> <HiOutlineLogout  /></NavLink>
-        </div>
+      <div className="settings-icon" onClick={handleLogout}>
+      <HiOutlineLogout style={{ cursor: 'pointer' }} />
+      </div>
       </div>
     </div>
   );

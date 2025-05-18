@@ -55,6 +55,12 @@
     box-sizing: border-box;
 }
 
+.login-input:focus {
+  border-color: var(--color-primary); 
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1); 
+}
+
 .Login-Form button {
     display: flex;
     padding: 7px;
@@ -67,3 +73,7 @@
     color: white;
     font-weight: bold;
 }
+
+ .Login-Form button:hover{ 
+    filter: brightness(90%);
+  }
