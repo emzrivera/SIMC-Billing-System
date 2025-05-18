@@ -316,7 +316,7 @@
   }
   .truncate-tooltip {
     display: inline-block;
-    max-width: 150px; /* adjust width as needed */
+    max-width: 100px; /* adjust width as needed */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
