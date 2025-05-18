@@ -133,6 +133,27 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+router.get('/hmo/:patientId', async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+    const hmoRes = await fetch(`${process.env.HMO_API_URL}`);
+    const hmoData = await hmoRes.json();
+
+    const patientHmo = hmoData.find(entry => entry.patientId === patientId);
+
+    if (!patientHmo) {
+      return res.status(404).json({ message: 'No HMO info found for this patient' });
+    }
+
+    res.json(patientHmo);
+  } catch (err) {
+    console.error('Error fetching HMO info:', err);
+    res.status(500).json({ message: 'Server error while fetching HMO info' });
+  }
+});
+
+
 router.get('/:invoiceId', async (req, res) => {
   try {
     const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
