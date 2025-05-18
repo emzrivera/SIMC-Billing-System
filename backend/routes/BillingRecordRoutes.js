@@ -3,7 +3,6 @@ const router = express.Router();
 const BillingRecord = require('../models/BillingRecordModel');
 const fetch = require('node-fetch');
 
-// services and rooms pricing
 const servicePriceMap = {
   'consultation': 1000,
   'x-ray': 800,
@@ -33,12 +32,7 @@ router.get('/', async (req, res) => {
 // POST to create a billing record
 router.post('/', async (req, res) => {
   try {
-    const {
-      patientId,
-      roomType,
-      noOfDays,
-      medicalServices
-    } = req.body;
+    const { patientId, roomType, noOfDays, medicalServices } = req.body;
 
     // Fetch patient info
     const patientRes = await fetch(process.env.PATIENT_API_URL);
@@ -51,26 +45,29 @@ router.post('/', async (req, res) => {
     const inventoryRes = await fetch(process.env.PHARMACY_API_URL);
     const inventory = await inventoryRes.json();
 
-    // Fetch prescriptions
-    const presRes = await fetch(process.env.PRESCRIPTION_API_URL);
-    const allPrescriptions = await presRes.json();
-    const prescription = allPrescriptions.find(p => p.patientId === patientId);
-    const meds = prescription?.inscription || [];
-
-    // Format medicines
+    // Fetch prescriptions and format meds
     let medicineTotal = 0;
-    const formattedMeds = meds.map(med => {
-      const found = inventory.find(i => i.name.toLowerCase() === med.name.toLowerCase());
-      const unitPrice = found ? found.price : 0;
-      const total = unitPrice * med.quantity;
-      medicineTotal += total;
-      return {
-        name: med.name,
-        quantity: med.quantity,
-        unitPrice,
-        total
-      };
-    });
+    let formattedMeds = [];
+
+    try {
+      const presRes = await fetch(process.env.PRESCRIPTION_API_URL);
+      const prescriptions = await presRes.json();
+      const matched = prescriptions.find(p => p.patientId === patientId);
+
+      if (matched && Array.isArray(matched.inscription)) {
+        formattedMeds = matched.inscription.map(med => {
+          const name = med?.name || 'Unknown';
+          const quantity = parseInt(med?.quantity) || 0;
+          const match = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
+          const unitPrice = match ? match.price : 0;
+          const total = unitPrice * quantity;
+          medicineTotal += total;
+          return { name, quantity, unitPrice, total };
+        });
+      }
+    } catch (err) {
+      console.error('Prescription error:', err);
+    }
 
     // Format services
     const formattedServices = (medicalServices || []).map(service => {
@@ -84,12 +81,12 @@ router.post('/', async (req, res) => {
     const roomTotal = roomRate * (noOfDays || 0);
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
 
-    // Fetch HMO info
+    // Fetch HMO
     const hmoRes = await fetch(process.env.HMO_API_URL);
     const hmoData = await hmoRes.json();
-    const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
-    const hmoProvider = hmoEntry?.healthCardName || 'None';
-    const hmoPercentage = hmoEntry?.discount || 0;
+    const hmo = hmoData.data.find(card => card.patientId === patientId);
+    const hmoProvider = hmo?.healthCardName || 'None';
+    const hmoPercentage = hmo?.discount || 0;
 
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
