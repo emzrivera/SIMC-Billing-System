@@ -31,13 +31,12 @@ const billingRecordSchema = new mongoose.Schema({
     default: 'Regular'
   },
 
-  hmoInfo: [
-    {
-      provider: String,
-      percentage: Number,
-      discount: Number
-    }
-  ],
+  hmoInfo: {
+    provider: String,
+    percentage: Number,
+    discount: Number
+  },
+
 
   totalAmount: Number,
   discountAmount: Number,

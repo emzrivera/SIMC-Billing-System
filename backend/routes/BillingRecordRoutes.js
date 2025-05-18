@@ -150,14 +150,15 @@ router.get('/:invoiceId', async (req, res) => {
 
 router.patch('/:invoiceId', async (req, res) => {
   try {
+    const updateFields = req.body;  // allow any fields from the frontend
     const updatedInvoice = await BillingRecord.findOneAndUpdate(
       { invoiceId: req.params.invoiceId },
-      { status: req.body.status },
+      updateFields,
       { new: true }
     );
     res.json(updatedInvoice);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update invoice status' });
+    res.status(500).json({ error: 'Failed to update invoice' });
   }
 });
 
