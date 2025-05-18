@@ -45,7 +45,7 @@ const InvoiceDetails = () => {
       if (!invoice?.patientId) return;
 
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/hmo/${invoice.patientId}`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/hmo/${invoice.patientId}`);
         const hmo = await res.json();
 
         if (hmo?.discount) {
@@ -210,7 +210,7 @@ const InvoiceDetails = () => {
               {hmoInfo && (
                 <div className="summary-row">
                   <span>Health Card <span className="badge">{hmoInfo.provider} ({hmoInfo.percentage}%)</span></span>
-                  <span>– ₱{hmoInfo.discount}</span>
+                  <span>– ₱{hmoInfo.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
 
