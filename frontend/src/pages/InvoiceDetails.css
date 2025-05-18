@@ -313,6 +313,9 @@
     border-radius: 4px;
     font-size: 11px;
     margin-left: 5px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .badge.blue {

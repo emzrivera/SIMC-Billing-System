@@ -88,18 +88,6 @@ const AddInvoiceModal = ({ onClose }) => {
   const addService = () => setMedicalServices([...medicalServices, '']);
   const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
 
-  // const handleMedicineChange = (index, field, value) => {
-  //   const updated = [...medicines];
-  //   updated[index][field] = value;
-
-  //   if (field === 'name') {
-  //     const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
-  //     updated[index].price = match ? match.price : 0;
-  //   }
-
-  //   setMedicines(updated);
-  // };
-
   const handleSubmit = async e => {
     e.preventDefault();
 
