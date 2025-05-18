@@ -3,7 +3,6 @@ const router = express.Router();
 const BillingRecord = require('../models/BillingRecordModel');
 const fetch = require('node-fetch');
 
-// Static maps
 const servicePriceMap = {
   'consultation': 1000,
   'x-ray': 800,
@@ -19,6 +18,7 @@ const roomRateMap = {
   'ward': 500
 };
 
+// Get all billing records
 router.get('/', async (req, res) => {
   try {
     const records = await BillingRecord.find().sort({ invoiceDate: -1 });
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a billing record
+// Create a new billing record
 router.post('/', async (req, res) => {
   try {
     const {
@@ -41,31 +41,31 @@ router.post('/', async (req, res) => {
       hmoInfo: frontendHmoInfo
     } = req.body;
 
-    // fetch patient name from PRMS
+    // Fetch patient info
     const patientRes = await fetch(`${process.env.PATIENT_API_URL}`);
     const patients = await patientRes.json();
     const patient = patients.find(p => p.patientId === patientId);
     const patientName = patient ? `${patient.firstName} ${patient.lastName}` : 'Unknown';
-    const patientDiscount = patient?.status || 'Regular';
+    const patientStatus = patient?.status || 'Regular';
+    const patientDiscount = patientStatus;
 
-    // fetch pharmacy inventory
+    // Fetch medicine prices
     const inventoryRes = await fetch(`${process.env.PHARMACY_API_URL}`);
     const inventory = await inventoryRes.json();
 
-    // service total calculation
+    // Medical services
     const formattedServices = (medicalServices || []).map(service => {
       const key = service.toLowerCase().trim();
       const price = servicePriceMap[key] || 0;
       return { name: service, price };
     });
-
     const serviceTotal = formattedServices.reduce((sum, s) => sum + s.price, 0);
 
-    // room total calculation
+    // Room
     const roomRate = roomRateMap[roomType?.toLowerCase().trim()] || 0;
     const roomTotal = roomRate * (noOfDays || 0);
 
-    // medicine total calculation
+    // Medicines
     let medicineTotal = 0;
     const formattedMeds = (medicines || []).map(med => {
       const found = inventory.find(m => m.name.toLowerCase() === med.name.toLowerCase().trim());
@@ -82,30 +82,30 @@ router.post('/', async (req, res) => {
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
 
-    // Applying patient discount (Senior/PWD or Regular)
-    const patientStatus = patient?.status || 'Regular';
+    // Patient discount
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
     const afterPatientDiscount = totalAmount - discountAmount;
 
-    // HMO Discount Calculation
+    // HMO discount
     let hmoDiscount = 0;
     let hmoInfo = null;
 
     if (frontendHmoInfo?.provider && frontendHmoInfo?.percentage) {
-      hmoDiscount = afterPatientDiscount * (frontendHmoInfo.percentage / 100);
+      const percentage = Number(frontendHmoInfo.percentage);
+      hmoDiscount = afterPatientDiscount * (percentage / 100);
       hmoInfo = {
         provider: frontendHmoInfo.provider,
-        percentage: frontendHmoInfo.percentage,
+        percentage,
         discount: hmoDiscount
       };
     }
 
-    // Calculating balance due after both patient and HMO discounts
+    // Final balance
     const balanceDue = afterPatientDiscount - hmoDiscount;
 
-    // Generate invoice id
-    const counter = await BillingRecord.countDocuments(); 
+    // Generate invoice ID
+    const counter = await BillingRecord.countDocuments();
     const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
 
     const record = new BillingRecord({
@@ -135,8 +135,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-
+// Get invoice by ID
 router.get('/:invoiceId', async (req, res) => {
   try {
     const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
@@ -148,9 +147,10 @@ router.get('/:invoiceId', async (req, res) => {
   }
 });
 
+// Update invoice (e.g., voiding)
 router.patch('/:invoiceId', async (req, res) => {
   try {
-    const updateFields = req.body;  // allow any fields from the frontend
+    const updateFields = req.body;
     const updatedInvoice = await BillingRecord.findOneAndUpdate(
       { invoiceId: req.params.invoiceId },
       updateFields,
@@ -158,7 +158,42 @@ router.patch('/:invoiceId', async (req, res) => {
     );
     res.json(updatedInvoice);
   } catch (error) {
+    console.error('Failed to update invoice:', error);
     res.status(500).json({ error: 'Failed to update invoice' });
+  }
+});
+
+
+router.patch('/:id', async (req, res) => {
+  try {
+    const { hmoInfo } = req.body; // destructure hmoInfo from request body
+    const { discountAmount, totalAmount, amountPaid } = req.body;
+
+    // Calculate HMO discount and new balanceDue here
+    const afterPatientDiscount = totalAmount - discountAmount;
+    const hmoDiscount = hmoInfo?.discount || 0;
+    const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
+
+    // Update the record with the new balanceDue and hmoInfo
+    const updatedInvoice = await BillingRecord.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          hmoInfo,
+          balanceDue: newBalanceDue // Store the calculated balance due
+        }
+      },
+      { new: true }
+    );
+
+    if (updatedInvoice) {
+      return res.status(200).json(updatedInvoice);
+    } else {
+      return res.status(404).json({ message: 'Invoice not found' });
+    }
+  } catch (err) {
+    console.error('Error updating invoice:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
