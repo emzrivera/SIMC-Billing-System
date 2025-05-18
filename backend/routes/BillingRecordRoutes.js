@@ -79,32 +79,31 @@ router.post('/', async (req, res) => {
       };
     });
 
-    // fetch HMO info using patient ID
-    let hmoInfo = null;
-    let hmoDiscount = 0;
-
-    try {
-      const hmoRes = await fetch(`${process.env.HMO_API_URL}/${patientId}`);
-      if (hmoRes.ok) {
-        const hmoData = await hmoRes.json();
-        if (hmoData?.provider && hmoData?.percentage) {
-          hmoInfo = {
-            provider: hmoData.name,
-            percentage: hmoData.discount,
-          };
-          hmoDiscount = (totalAmount - discountAmount) * (hmoData.percentage / 100);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to fetch HMO data:', err);
-    }
-
-
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-    const balanceDue = totalAmount - discountAmount - hmoDiscount;
+
+    // fetch HMO info using patient ID
+    const hmoRes = await fetch(`${process.env.HMO_API_URL}`);
+    const hmoList = await hmoRes.json();
+    const hmo = hmoList.find(h => h.patientId === patientId);
+
+    let hmoDiscountAmount = 0;
+    let hmoInfo = [];
+
+    if (hmo && hmo.percentage) {
+      hmoDiscountAmount = (totalAmount - discountAmount) * (hmo.percentage / 100);
+      balanceDue -= hmoDiscountAmount;
+
+      hmoInfo = [{
+        provider: hmo.name,
+        percentage: hmo.discount,
+        discount: hmoDiscountAmount
+      }];
+    }
+
+    const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -122,7 +121,7 @@ router.post('/', async (req, res) => {
       medicines: formattedMeds,
       totalAmount,
       discountAmount,
-      hmoInfo: hmoInfo ? [{ ...hmoInfo, discount: hmoDiscount }] : [],
+      hmoInfo,
       amountPaid: 0,
       balanceDue,
       status: 'Unpaid',
