@@ -8,6 +8,11 @@ const path = require('path');
 dotenv.config();
 connectDB();
 
+app.use(cors({
+  origin: 'https://simc-billing-system.onrender.com',
+  credentials: true, 
+}));
+
 const app = express();
 app.use(cors());
 app.use(express.json());
