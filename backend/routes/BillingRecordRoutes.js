@@ -30,7 +30,6 @@ router.get('/', async (req, res) => {
 });
 
 // Create a billing record
-// Create a billing record
 router.post('/', async (req, res) => {
   try {
     const {
@@ -83,25 +82,29 @@ router.post('/', async (req, res) => {
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
 
+    // Applying patient discount (Senior/PWD or Regular)
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
     const afterPatientDiscount = totalAmount - discountAmount;
 
-
+    // HMO Discount Calculation
+    let hmoDiscount = 0;
     let hmoInfo = null;
 
     if (frontendHmoInfo?.provider && frontendHmoInfo?.percentage) {
+      hmoDiscount = afterPatientDiscount * (frontendHmoInfo.percentage / 100);
       hmoInfo = {
         provider: frontendHmoInfo.provider,
         percentage: frontendHmoInfo.percentage,
-        discount: frontendHmoInfo.discount
+        discount: hmoDiscount
       };
     }
 
-    const balanceDue = afterPatientDiscount - hmoInfo.discount;
+    // Calculating balance due after both patient and HMO discounts
+    const balanceDue = afterPatientDiscount - hmoDiscount;
 
-    // generate invoice id
+    // Generate invoice id
     const counter = await BillingRecord.countDocuments(); 
     const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
 
@@ -115,7 +118,7 @@ router.post('/', async (req, res) => {
       noOfDays,
       medicines: formattedMeds,
       patientDiscount,
-      hmoInfo: hmoInfo,
+      hmoInfo,
       totalAmount,
       discountAmount,
       amountPaid: 0,
@@ -131,6 +134,8 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Server error during invoice creation' });
   }
 });
+
+
 
 router.get('/:invoiceId', async (req, res) => {
   try {
