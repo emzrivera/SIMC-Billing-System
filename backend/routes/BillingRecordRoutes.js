@@ -8,8 +8,8 @@ const servicePriceMap = {
   'consultation': 1000,
   'x-ray': 800,
   'surgery': 50000,
-  'MRI': 3000,
-  'blood test': 1000,
+  'mri': 3000,
+  'blood test': 1000
 };
 
 const roomRateMap = {
@@ -19,7 +19,7 @@ const roomRateMap = {
   'ward': 500
 };
 
-// GET route to return all billing records
+// GET all billing records
 router.get('/', async (req, res) => {
   try {
     const records = await BillingRecord.find().sort({ invoiceDate: -1 });
@@ -30,47 +30,39 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST route to receive and compute invoice
+// POST to create a billing record
 router.post('/', async (req, res) => {
   try {
     const {
       patientId,
       roomType,
       noOfDays,
-      medicalServices,
-      medicines
+      medicalServices
     } = req.body;
 
+    // Fetch patient info
     const patientRes = await fetch(process.env.PATIENT_API_URL);
     const patients = await patientRes.json();
     const patient = patients.find(p => p.patientId === patientId);
     const patientName = patient ? `${patient.firstName} ${patient.lastName}` : 'Unknown';
     const patientStatus = patient?.status || 'Regular';
 
+    // Fetch inventory
     const inventoryRes = await fetch(process.env.PHARMACY_API_URL);
     const inventory = await inventoryRes.json();
 
-    const hmoRes = await fetch(process.env.HMO_API_URL);
-    const hmoData = await hmoRes.json();
-    const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
-    const hmoProvider = hmoEntry?.healthCardName || 'None';
-    const hmoPercentage = hmoEntry?.discount || 0;
+    // Fetch prescriptions
+    const presRes = await fetch(process.env.PRESCRIPTION_API_URL);
+    const allPrescriptions = await presRes.json();
+    const prescription = allPrescriptions.find(p => p.patientId === patientId);
+    const meds = prescription?.inscription || [];
 
-    const formattedServices = (medicalServices || []).map(service => {
-      const key = service.toLowerCase().trim();
-      const price = servicePriceMap[key] || 0;
-      return { name: service, price };
-    });
-
-    const serviceTotal = formattedServices.reduce((sum, s) => sum + s.price, 0);
-    const roomRate = roomRateMap[roomType?.toLowerCase().trim()] || 0;
-    const roomTotal = roomRate * (noOfDays || 0);
-
+    // Format medicines
     let medicineTotal = 0;
-    const formattedMeds = (medicines || []).map(med => {
-      const found = inventory.find(m => m.name.toLowerCase() === med.name.toLowerCase().trim());
+    const formattedMeds = meds.map(med => {
+      const found = inventory.find(i => i.name.toLowerCase() === med.name.toLowerCase());
       const unitPrice = found ? found.price : 0;
-      const total = unitPrice * (med.quantity || 0);
+      const total = unitPrice * med.quantity;
       medicineTotal += total;
       return {
         name: med.name,
@@ -80,13 +72,31 @@ router.post('/', async (req, res) => {
       };
     });
 
+    // Format services
+    const formattedServices = (medicalServices || []).map(service => {
+      const key = service.toLowerCase().trim();
+      const price = servicePriceMap[key] || 0;
+      return { name: service, price };
+    });
+
+    const serviceTotal = formattedServices.reduce((sum, s) => sum + s.price, 0);
+    const roomRate = roomRateMap[roomType?.toLowerCase().trim()] || 0;
+    const roomTotal = roomRate * (noOfDays || 0);
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
+
+    // Fetch HMO info
+    const hmoRes = await fetch(process.env.HMO_API_URL);
+    const hmoData = await hmoRes.json();
+    const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
+    const hmoProvider = hmoEntry?.healthCardName || 'None';
+    const hmoPercentage = hmoEntry?.discount || 0;
+
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
     const hmoDiscountAmount = totalAmount * (hmoPercentage / 100);
     const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
 
-    const counter = await BillingRecord.countDocuments(); 
+    const counter = await BillingRecord.countDocuments();
     const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
 
     const record = new BillingRecord({
@@ -120,7 +130,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-
+// GET invoice by ID
 router.get('/:invoiceId', async (req, res) => {
   try {
     const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
