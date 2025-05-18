@@ -79,6 +79,11 @@ const Billing = () => {
   
         <div className="patient-billing-container">
           <div className="stats-container">
+            <div className="stat-card gray">
+              <p>Revenue Today</p>
+              <span>₱42,000.00</span>
+              <p>Billed as of now</p>
+            </div>
             <div className="stat-card blue">
               <div>
                 <p>Unpaid Invoices</p>
@@ -99,11 +104,6 @@ const Billing = () => {
               </span>
               <p>Collected as of now</p>
             </div>
-            /* <div className="stat-card gray">
-              <p>Pending HMO Claims</p>
-              <span>₱42,000.00</span>
-              <p>Not yet cleared</p>
-            </div> */
           </div>
 
           <div className="invoice-section">

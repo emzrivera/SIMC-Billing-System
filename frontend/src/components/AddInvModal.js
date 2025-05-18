@@ -29,7 +29,7 @@ const AddInvoiceModal = ({ onClose }) => {
 
     const fetchPatients = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`); //change when grant access
+        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`);
         const data = await res.json();
         setPatients(data);
       } catch (err) {
@@ -37,8 +37,19 @@ const AddInvoiceModal = ({ onClose }) => {
       }
     };
 
+    const fetchPrescriptions = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_PRESCRIPTION_API_URL}`);
+        const data = await res.json();
+        setPrescriptions(data);
+      } catch (err) {
+        console.error('Failed to fetch prescriptions');
+      }
+    };
+
     fetchInventory();
     fetchPatients();
+    fetchPrescriptions();
   }, []);
 
   useEffect(() => {
@@ -50,6 +61,7 @@ const AddInvoiceModal = ({ onClose }) => {
     }
   }, [patientId, patients]);
 
+  
   const handleServiceChange = (value, index) => {
     const updated = [...medicalServices];
     updated[index] = value;
@@ -59,20 +71,37 @@ const AddInvoiceModal = ({ onClose }) => {
   const addService = () => setMedicalServices([...medicalServices, '']);
   const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
 
-  const handleMedicineChange = (index, field, value) => {
-    const updated = [...medicines];
-    updated[index][field] = value;
+  // const handleMedicineChange = (index, field, value) => {
+  //   const updated = [...medicines];
+  //   updated[index][field] = value;
 
-    if (field === 'name') {
-      const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
-      updated[index].price = match ? match.price : 0;
+  //   if (field === 'name') {
+  //     const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
+  //     updated[index].price = match ? match.price : 0;
+  //   }
+  //   setMedicines(updated);
+  // };
+
+  useEffect(() => {
+    const matched = patients.find(p => p.patientId === patientId);
+    if (matched) {
+      setPatientName(`${matched.firstName} ${matched.lastName}`);
+    } else {
+      setPatientName('');
     }
+    
+    const patientPrescription = prescriptions.find(p => p.patientId === patientId);
+      if (patientPrescription && patientPrescription.inscription.length > 0) {
+        const formattedMeds = patientPrescription.inscription.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+        }));
+        setMedicines(formattedMeds);
+      } else {
+        setMedicines([]);
+      }
+  }, [patientId, patients, prescriptions]);
 
-    setMedicines(updated);
-  };
-
-  const addMedicine = () => setMedicines([...medicines, { name: '', quantity: 1, price: 0 }]);
-  const removeMedicine = (index) => setMedicines(medicines.filter((_, i) => i !== index));
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -172,37 +201,21 @@ const AddInvoiceModal = ({ onClose }) => {
           </section>
 
           <section>
-            <h4><FaPills className="section-icon" /> Medicine</h4>
-
-            {medicines.map((med, idx) => (
-              <div className="input-row" key={idx}>
-                <div className="med-name">
-                  <label>Name</label>
-                  <select
-                    value={med.name}
-                    onChange={(e) => handleMedicineChange(idx, 'name', e.target.value)}
-                    required
-                  >
-                    <option value="">Select Medicine</option>
-                    {inventory.map(m => (
-                      <option key={m.name} value={m.name}>{m.name}</option>
-                    ))}
-                  </select>
+            <h4><FaPills className="section-icon" /> Prescribed Medicines</h4>
+            {prescriptions
+              .filter(p => p.patientId === patientId)
+              .map((prescription, idx) => (
+                <div className="input-row" key={idx}>
+                  <div className="med-name">
+                    <label>Medicine</label>
+                    <input type="text" value={prescription.name} readOnly />
+                  </div>
+                  <div className="quantity">
+                    <label>Qty</label>
+                    <input type="number" value={prescription.quantity} readOnly />
+                  </div>
                 </div>
-                <div className="quantity">
-                  <label>Qty</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={med.quantity}
-                    onChange={(e) => handleMedicineChange(idx, 'quantity', e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="button" className="delete-item-btn" onClick={() => removeMedicine(idx)}><HiOutlineTrash className="icon" /> </button>
-              </div>
-            ))}
-            <button type="button" className="add-item-btn" onClick={addMedicine}><AddIcon className="icon" /> Add Item</button>
+              ))}
           </section>
 
           <div className="modal-actions">
