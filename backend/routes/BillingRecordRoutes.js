@@ -45,31 +45,27 @@ router.post('/', async (req, res) => {
     const inventoryRes = await fetch(process.env.PHARMACY_API_URL);
     const inventory = await inventoryRes.json();
 
-    // Fetch prescriptions and format meds
-    let medicineTotal = 0;
+    // Fetch prescriptions and compute medicine totals
+    const presRes = await fetch(process.env.PRESCRIPTION_API_URL);
+    const prescriptions = await presRes.json();
+    const matchedPrescription = prescriptions?.data?.find(p => p.patientId === patientId);
+
     let formattedMeds = [];
+    let medicineTotal = 0;
 
-    try {
-      const presRes = await fetch(process.env.PRESCRIPTION_API_URL);
-      const prescriptions = await presRes.json();
-      const matched = prescriptions.find(p => p.patientId === patientId);
-
-      if (matched && Array.isArray(matched.inscription)) {
-        formattedMeds = matched.inscription.map(med => {
-          const name = med?.name || 'Unknown';
-          const quantity = parseInt(med?.quantity) || 0;
-          const match = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-          const unitPrice = match ? match.price : 0;
-          const total = unitPrice * quantity;
-          medicineTotal += total;
-          return { name, quantity, unitPrice, total };
-        });
-      }
-    } catch (err) {
-      console.error('Prescription error:', err);
+    if (matchedPrescription && Array.isArray(matchedPrescription.inscription)) {
+      formattedMeds = matchedPrescription.inscription.map(med => {
+        const name = med.name;
+        const quantity = parseInt(med.quantity);
+        const match = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
+        const unitPrice = match ? match.price : 0;
+        const total = unitPrice * quantity;
+        medicineTotal += total;
+        return { name, quantity, unitPrice, total };
+      });
     }
 
-    // Format services
+    // Compute services
     const formattedServices = (medicalServices || []).map(service => {
       const key = service.toLowerCase().trim();
       const price = servicePriceMap[key] || 0;
@@ -81,22 +77,24 @@ router.post('/', async (req, res) => {
     const roomTotal = roomRate * (noOfDays || 0);
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
 
-    // Fetch HMO
+    // Fetch HMO info
     const hmoRes = await fetch(process.env.HMO_API_URL);
     const hmoData = await hmoRes.json();
-    const hmo = hmoData.data.find(card => card.patientId === patientId);
-    const hmoProvider = hmo?.healthCardName || 'None';
-    const hmoPercentage = hmo?.discount || 0;
+    const hmoEntry = hmoData?.data?.find(card => card.patientId === patientId);
+    const hmoProvider = hmoEntry?.healthCardName || 'None';
+    const hmoPercentage = hmoEntry?.discount || 0;
 
+    // Discounts
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
     const hmoDiscountAmount = totalAmount * (hmoPercentage / 100);
     const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
 
+    // Generate invoice ID
     const counter = await BillingRecord.countDocuments();
     const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
 
-    const record = new BillingRecord({
+    const newInvoice = new BillingRecord({
       invoiceId,
       patientId,
       patientName,
@@ -119,13 +117,15 @@ router.post('/', async (req, res) => {
       invoiceDate: new Date()
     });
 
-    await record.save();
+    await newInvoice.save();
     res.status(201).json({ message: 'Invoice created successfully', invoiceId });
+
   } catch (err) {
     console.error('Failed to create invoice:', err);
     res.status(500).json({ message: 'Server error during invoice creation' });
   }
 });
+
 
 // GET invoice by ID
 router.get('/:invoiceId', async (req, res) => {
