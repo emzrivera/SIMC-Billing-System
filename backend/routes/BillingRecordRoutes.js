@@ -83,27 +83,7 @@ router.post('/', async (req, res) => {
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-
-    // fetch HMO info using patient ID
-    const hmoRes = await fetch(`${process.env.HMO_API_URL}`);
-    const hmoList = await hmoRes.json();
-    const hmo = hmoList.find(h => h.patientId === patientId);
-
-    let hmoDiscountAmount = 0;
-    let hmoInfo = [];
-
-    if (hmo && hmo.percentage) {
-      hmoDiscountAmount = (totalAmount - discountAmount) * (hmo.percentage / 100);
-      balanceDue -= hmoDiscountAmount;
-
-      hmoInfo = [{
-        provider: hmo.name,
-        percentage: hmo.discount,
-        discount: hmoDiscountAmount
-      }];
-    }
-
-    const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
+    const balanceDue = totalAmount - discountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -121,14 +101,12 @@ router.post('/', async (req, res) => {
       medicines: formattedMeds,
       totalAmount,
       discountAmount,
-      hmoInfo,
       amountPaid: 0,
       balanceDue,
       status: 'Unpaid',
       invoiceDate: new Date()
     });
 
-    
     await record.save();
     res.status(201).json({ message: 'Invoice created successfully', invoiceId });
   } catch (err) {
