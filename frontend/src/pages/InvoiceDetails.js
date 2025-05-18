@@ -100,6 +100,29 @@ const InvoiceDetails = () => {
   const hmoDiscount = hmoInfo?.discount || 0;
   const balanceDue = afterPatientDiscount - hmoDiscount - (invoice?.amountPaid || 0);
 
+
+  const handleVoid = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'void' }),
+      });
+
+      if (res.ok) {
+        const updatedInvoice = await res.json();
+        setInvoice(updatedInvoice); // Update UI
+      } else {
+        console.error('Failed to void invoice');
+      }
+    } catch (err) {
+      console.error('Error voiding invoice:', err);
+    }
+  };
+
+
   return (
     <div className="invoice-details-page">
       <div className="invoice-details-container">
@@ -123,8 +146,8 @@ const InvoiceDetails = () => {
           </div>
 
           <div className="action-buttons">
-            <button className="edit-btn"> < HiOutlinePencil /> Edit</button>
-            <button className="void-btn"> < FaBan /> Void</button>
+            {/* <button className="edit-btn"> < HiOutlinePencil /> Edit</button> */}
+            <button className="void-btn" onClick={handleVoid}> < FaBan /> Void</button>
             <button className="add-btn" onClick={openPaymentModal}> < FaMoneyBill /> Add Payment</button>
           </div>
         </div>

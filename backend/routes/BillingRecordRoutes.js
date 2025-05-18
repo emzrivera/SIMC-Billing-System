@@ -154,14 +154,16 @@ router.post('/', async (req, res) => {
 // });
 
 
-router.get('/:invoiceId', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
-    const record = await BillingRecord.findOne({ invoiceId: req.params.invoiceId });
-    if (!record) return res.status(404).json({ message: 'Invoice not found' });
-    res.json(record);
-  } catch (err) {
-    console.error('Failed to fetch invoice details:', err);
-    res.status(500).json({ message: 'Server error' });
+    const updatedInvoice = await BillingRecord.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    res.json(updatedInvoice);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update invoice status' });
   }
 });
 
