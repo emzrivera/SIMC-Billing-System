@@ -68,39 +68,34 @@ const InvoiceDetails = () => {
   fetchHmoInfo();
 }, [invoice]);
 
-useEffect(() => {
-  const updateInvoiceWithHmo = async () => {
-    if (!invoice || !hmoInfo?.provider) return;
-    
-    const totalAmount = invoice.totalAmount || 0;
-    const discountAmount = invoice.discountAmount || 0;
-    const afterPatientDiscount = totalAmount - discountAmount;
-    const hmoDiscount = hmoInfo.discount || 0;
-    const amountPaid = invoice.amountPaid || 0;
-    const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
+const updateInvoiceWithHmo = async () => {
+  if (!invoice || !hmoInfo?.provider) return;
 
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ hmoInfo }),
-      });
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        hmoInfo,
+        totalAmount: invoice.totalAmount,
+        discountAmount: invoice.discountAmount,
+        amountPaid: invoice.amountPaid
+      }),
+    });
 
-      if (res.ok) {
-        const updated = await res.json();
-        setInvoice(updated);
-      } else {
-        console.error('Failed to update invoice with HMO info');
-      }
-    } catch (err) {
-      console.error('Error updating invoice with HMO info:', err);
+    if (res.ok) {
+      const updatedInvoice = await res.json();
+      setInvoice(updatedInvoice); // Update UI with new invoice
+    } else {
+      console.error('Failed to update invoice with HMO info');
     }
-  };
+  } catch (err) {
+    console.error('Error updating invoice with HMO info:', err);
+  }
+};
 
-  updateInvoiceWithHmo();
-}, [hmoInfo]);
 
 
 

@@ -163,17 +163,37 @@ router.patch('/:invoiceId', async (req, res) => {
   }
 });
 
-router.patch('/:invoiceId', async (req, res) => {
+
+router.patch('/:id', async (req, res) => {
   try {
-    const updatedRecord = await BillingRecord.findOneAndUpdate(
-      { invoiceId: req.params.invoiceId },
-      { $set: req.body},
+    const { hmoInfo } = req.body; // destructure hmoInfo from request body
+    const { discountAmount, totalAmount, amountPaid } = req.body;
+
+    // Calculate HMO discount and new balanceDue here
+    const afterPatientDiscount = totalAmount - discountAmount;
+    const hmoDiscount = hmoInfo?.discount || 0;
+    const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
+
+    // Update the record with the new balanceDue and hmoInfo
+    const updatedInvoice = await BillingRecord.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          hmoInfo,
+          balanceDue: newBalanceDue // Store the calculated balance due
+        }
+      },
       { new: true }
     );
 
-    res.status(200).json(updatedRecord);
+    if (updatedInvoice) {
+      return res.status(200).json(updatedInvoice);
+    } else {
+      return res.status(404).json({ message: 'Invoice not found' });
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error updating invoice:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
