@@ -25,7 +25,7 @@ const Billing = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        await fetch(`${process.env.REACT_APP_API_URL}/api/billing/generate`);
+        // await fetch(`${process.env.REACT_APP_API_URL}/api/billing/generate`);
         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records`);
         const records = await res.json();
         const fetched = records.map((record, index) => {
