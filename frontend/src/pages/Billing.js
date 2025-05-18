@@ -4,7 +4,7 @@ import './Billing.css';
 import AddInvoiceModal from '../components/AddInvModal';
 
 import { ReactComponent as AddIcon } from '../assets/add-icon.svg';
-import { HiOutlineDotsVertical, HiOutlineSearch  } from 'react-icons/hi';
+import {  HiOutlineArrowRight, HiOutlineSearch  } from 'react-icons/hi';
 
 
 const Billing = () => {
@@ -140,7 +140,7 @@ const Billing = () => {
               </div>
 
               <div className="billing-filters">
-                <p> Filter by</p>
+                <p> Filter by</p> 
               <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                 <option value="All">Status (All)</option>
                 <option value="Unpaid">Unpaid</option>
@@ -200,7 +200,7 @@ const Billing = () => {
                     <td>{invoice.date}</td>
                     <td className="icon-cell">
                       <NavLink to={`/invoice/${invoice.id}`} style={{ display: 'inline-flex', alignItems: 'center'}}>
-                        <HiOutlineDotsVertical size={20} color="#555" />
+                        <HiOutlineArrowRight size={20} color="#555" />
                       </NavLink>
                     </td>
                   </tr>
