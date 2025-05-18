@@ -10,10 +10,12 @@ connectDB();
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://simc-billing-system.onrender.com',
-  credentials: true, 
-}));
+app.use(cors(
+//   {
+//   origin: 'https://simc-billing-system.onrender.com',
+//   credentials: true, 
+// }
+));
 
 app.use(express.json());
 
