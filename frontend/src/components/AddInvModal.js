@@ -52,30 +52,37 @@ const AddInvoiceModal = ({ onClose }) => {
     fetchPatients();
   }, []);
 
-  useEffect(() => {
-    const matchedPatient = patients.find(p => p.patientId === patientId);
-    if (matchedPatient) {
-      setPatientName(`${matchedPatient.firstName} ${matchedPatient.lastName}`);
+useEffect(() => {
+  if (!patientId || patients.length === 0 || prescriptions.length === 0) return;
 
-      const prescription = prescriptions.find(p => p.patientId === patientId);
-      if (prescription && Array.isArray(prescription.inscription)) {
-        const formattedMeds = prescription.inscription.map(med => {
-          const match = inventory.find(item => item.name.toLowerCase() === med.name.toLowerCase());
-          return {
-            name: med.name,
-            quantity: med.quantity,
-            price: match ? match.price : 0
-          };
-        });
-        setMedicines(formattedMeds);
-      } else {
-        setMedicines([]); // Clear if no prescription
-      }
+  const matchedPatient = patients.find(p => p.patientId.toLowerCase().trim() === patientId.toLowerCase().trim());
+
+  if (matchedPatient) {
+    setPatientName(`${matchedPatient.firstName} ${matchedPatient.lastName}`);
+
+    const prescription = prescriptions.find(
+      p => p.patientId.toLowerCase().trim() === patientId.toLowerCase().trim()
+    );
+
+    if (prescription && Array.isArray(prescription.inscription)) {
+      const formattedMeds = prescription.inscription.map(med => {
+        const match = inventory.find(item => item.name.toLowerCase().trim() === med.name.toLowerCase().trim());
+        return {
+          name: med.name,
+          quantity: med.quantity,
+          price: match ? match.price : 0
+        };
+      });
+      setMedicines(formattedMeds);
     } else {
-      setPatientName('');
-      setMedicines([]);
+      setMedicines([]); 
     }
-  }, [patientId, patients, prescriptions, inventory]);
+  } else {
+    setPatientName('');
+    setMedicines([]);
+  }
+}, [patientId, patients, prescriptions, inventory]);
+
 
 
 
