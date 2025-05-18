@@ -30,18 +30,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// //remove when grant access
-// router.get('/proxy', async (req, res) => {
-// try {
-// const response = await fetch(process.env.PATIENT_API_URL);
-// const data = await response.json();
-// res.json(data);
-// } catch (err) {
-// console.error('Proxy fetch error:', err.message);
-// res.status(500).json({ message: 'Error fetching patient data' });
-// }
-// });
-
 // POST route to receive and compute invoice
 router.post('/', async (req, res) => {
   try {
@@ -62,7 +50,7 @@ router.post('/', async (req, res) => {
     const inventoryRes = await fetch(process.env.PHARMACY_API_URL);
     const inventory = await inventoryRes.json();
 
-    const hmoRes = await fetch('https://hmo-queue.onrender.com/health-cards/patients');
+    const hmoRes = await fetch(process.env.HMO_API_URL);
     const hmoData = await hmoRes.json();
     const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
     const hmoProvider = hmoEntry?.healthCardName || 'None';
