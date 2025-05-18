@@ -79,11 +79,32 @@ router.post('/', async (req, res) => {
       };
     });
 
+    // fetch HMO info using patient ID
+    let hmoInfo = null;
+    let hmoDiscount = 0;
+
+    try {
+      const hmoRes = await fetch(`${process.env.HMO_API_URL}/${patientId}`);
+      if (hmoRes.ok) {
+        const hmoData = await hmoRes.json();
+        if (hmoData?.provider && hmoData?.percentage) {
+          hmoInfo = {
+            provider: hmoData.provider,
+            percentage: hmoData.percentage,
+          };
+          hmoDiscount = (totalAmount - discountAmount) * (hmoData.percentage / 100);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch HMO data:', err);
+    }
+
+
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-    const balanceDue = totalAmount - discountAmount;
+    const balanceDue = totalAmount - discountAmount - hmoDiscount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -101,6 +122,7 @@ router.post('/', async (req, res) => {
       medicines: formattedMeds,
       totalAmount,
       discountAmount,
+      hmoInfo: hmoInfo ? [{ ...hmoInfo, discount: hmoDiscount }] : [],
       amountPaid: 0,
       balanceDue,
       status: 'Unpaid',
