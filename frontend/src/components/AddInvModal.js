@@ -18,16 +18,6 @@ const AddInvoiceModal = ({ onClose }) => {
   const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
 
   useEffect(() => {
-    // const fetchInventory = async () => {
-    //   try {
-    //     const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`); 
-    //     const data = await res.json();
-    //     setInventory(data);
-    //   } catch (err) {
-    //     console.error('Failed to fetch inventory');
-    //   }
-    // };
-
     const fetchPatients = async () => {
       try {
         const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`);
@@ -45,11 +35,10 @@ const AddInvoiceModal = ({ onClose }) => {
         setPrescriptions(data.data);
       } catch (err) {
         console.error('Failed to fetch prescriptions');
-        // setPrescriptions([]); // fallback to empty array
+
       }
     };
 
-    // fetchInventory();
     fetchPatients();
     fetchPrescriptions();
   }, []);
