@@ -68,6 +68,33 @@ const InvoiceDetails = () => {
   fetchHmoInfo();
 }, [invoice]);
 
+useEffect(() => {
+  const updateInvoiceWithHmo = async () => {
+    if (!invoice || !hmoInfo?.provider) return;
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ hmoInfo }),
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setInvoice(updated);
+      } else {
+        console.error('Failed to update invoice with HMO info');
+      }
+    } catch (err) {
+      console.error('Error updating invoice with HMO info:', err);
+    }
+  };
+
+  updateInvoiceWithHmo();
+}, [hmoInfo]);
+
 
 
   const SECTION_CONFIG = [

@@ -163,4 +163,19 @@ router.patch('/:invoiceId', async (req, res) => {
   }
 });
 
+router.patch('/:invoiceId', async (req, res) => {
+  try {
+    const updatedRecord = await BillingRecord.findOneAndUpdate(
+      { invoiceId: req.params.invoiceId },
+      { $set: req.body},
+      { new: true }
+    );
+
+    res.status(200).json(updatedRecord);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;
