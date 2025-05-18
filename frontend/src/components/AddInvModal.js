@@ -42,7 +42,7 @@ const AddInvoiceModal = ({ onClose }) => {
       try {
         const res = await fetch(`${process.env.REACT_APP_PRESCRIPTION_API_URL}`);
         const data = await res.json();
-        setPrescriptions(Array.isArray(data) ? data : []);
+        setPrescriptions(data.data);
       } catch (err) {
         console.error('Failed to fetch prescriptions');
         setPrescriptions([]); // fallback to empty array
