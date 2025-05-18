@@ -99,7 +99,7 @@ const Billing = () => {
           <div className="stats-container">
             <div className="stat-card gray">
               <p>Revenue Today</p>
-              <span>₱42,000.00</span>
+              <span>₱{invoices.reduce((sum, i) => sum + i.total, 0).toLocaleString()}</span>
               <p>Billed as of now</p>
             </div>
             <div className="stat-card blue">

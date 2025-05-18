@@ -68,8 +68,17 @@ const InvoiceDetails = () => {
   fetchHmoInfo();
 }, [invoice]);
 
-const updateInvoiceWithHmo = async () => {
+useEffect(() => {
+  const updateInvoiceWithHmo = async () => {
   if (!invoice || !hmoInfo?.provider) return;
+
+  // Log the data being sent to the backend
+  console.log({
+    hmoInfo,
+    totalAmount: invoice.totalAmount,
+    discountAmount: invoice.discountAmount,
+    amountPaid: invoice.amountPaid
+  });
 
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
@@ -96,6 +105,9 @@ const updateInvoiceWithHmo = async () => {
   }
 };
 
+
+  updateInvoiceWithHmo();
+}, [hmoInfo]);
 
 
 

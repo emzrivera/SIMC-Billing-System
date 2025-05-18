@@ -163,11 +163,13 @@ router.patch('/:invoiceId', async (req, res) => {
   }
 });
 
-
+// PATCH route to update invoice
 router.patch('/:id', async (req, res) => {
   try {
-    const { hmoInfo } = req.body; // destructure hmoInfo from request body
-    const { discountAmount, totalAmount, amountPaid } = req.body;
+    const { hmoInfo, discountAmount, totalAmount, amountPaid } = req.body;
+    
+    // Log the received data to check if it's correct
+    console.log('PATCH Request Body:', req.body);
 
     // Calculate HMO discount and new balanceDue here
     const afterPatientDiscount = totalAmount - discountAmount;
@@ -175,8 +177,8 @@ router.patch('/:id', async (req, res) => {
     const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
 
     // Update the record with the new balanceDue and hmoInfo
-    const updatedInvoice = await BillingRecord.findByIdAndUpdate(
-      req.params.id,
+    const updatedInvoice = await BillingRecord.findOneAndUpdate(
+      { invoiceId: req.params.invoiceId },
       {
         $set: {
           hmoInfo,
@@ -187,6 +189,7 @@ router.patch('/:id', async (req, res) => {
     );
 
     if (updatedInvoice) {
+      console.log('Updated Invoice:', updatedInvoice); // Log to confirm update
       return res.status(200).json(updatedInvoice);
     } else {
       return res.status(404).json({ message: 'Invoice not found' });
@@ -196,6 +199,7 @@ router.patch('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 module.exports = router;
