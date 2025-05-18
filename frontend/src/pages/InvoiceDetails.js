@@ -93,7 +93,7 @@ const InvoiceDetails = () => {
 
   const totalAmount = invoice?.totalAmount || 0;
   const discountAmount = invoice?.discountAmount || 0;
-  const afterPatientDiscount = totalamount - discountAmount;
+  const afterPatientDiscount = totalAmount - discountAmount;
   const hmoDiscount = hmoInfo?.discount || 0;
   const balanceDue = afterPatientDiscount - hmoDiscount - (invoice?.amountPaid || 0);
 
