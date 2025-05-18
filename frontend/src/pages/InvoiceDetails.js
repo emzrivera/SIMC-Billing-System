@@ -90,7 +90,8 @@ useEffect(() => {
         hmoInfo,
         totalAmount: invoice.totalAmount,
         discountAmount: invoice.discountAmount,
-        amountPaid: invoice.amountPaid
+        amountPaid: invoice.amountPaid,
+        balanceDue
       }),
     });
 
