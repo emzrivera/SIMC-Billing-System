@@ -41,32 +41,33 @@ const InvoiceDetails = () => {
   }, [id]);
 
   useEffect(() => {
-    const fetchHmoInfo = async () => {
-      if (!invoice?.patientId) return;
+  const fetchHmoInfo = async () => {
+    if (!invoice?.patientId) return;
 
-      try {
-        const res = await fetch(`${process.env.REACT_APP_HMO_API_URL}`);
-        const hmoData = await res.json();
+    try {
+      const res = await fetch(`${process.env.REACT_APP_HMO_API_URL}`);
+      const hmoData = await res.json();
 
-        const patientHmo = hmoData.find(entry => entry.patientId === invoice.patientId);
+      const patientHmo = hmoData.find(entry => entry.patientId === invoice.patientId);
 
-        if (patientHmo?.discount) {
-          const afterPatientDiscount = (invoice.totalAmount || 0) - (invoice.discountAmount || 0);
-          const discount = afterPatientDiscount * (patientHmo.discount / 100);
+      if (patientHmo?.discount) {
+        const afterPatientDiscount = (invoice.totalAmount || 0) - (invoice.discountAmount || 0);
+        const hmoDiscount = afterPatientDiscount * (patientHmo.discount / 100);
 
-          setHmoInfo({
-            provider: patientHmo.name,
-            percentage: patientHmo.discount,
-            discount
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching HMO info directly from frontend:', err);
+        setHmoInfo({
+          provider: patientHmo.name,
+          percentage: patientHmo.discount,
+          discount: hmoDiscount
+        });
       }
-    };
+    } catch (err) {
+      console.error('Error fetching HMO info:', err);
+    }
+  };
 
-    fetchHmoInfo();
-  }, [invoice]);
+  fetchHmoInfo();
+}, [invoice]);
+
 
 
   const SECTION_CONFIG = [
