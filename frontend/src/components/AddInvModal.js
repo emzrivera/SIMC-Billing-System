@@ -9,18 +9,27 @@ const AddInvoiceModal = ({ onClose }) => {
   const [patientName, setPatientName] = useState('');
   const [medicalServices, setMedicalServices] = useState(['']);
   const [roomCharge, setRoomCharge] = useState({ type: '', days: 0 });
-  const [medicines, setMedicines] = useState([{ name: '', quantity: 1, price: 0 }]);
-  // const [inventory, setInventory] = useState([]);
+  const [medicines, setMedicines] = useState([]);
+  const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
-  const [prescriptions, setPrescriptions] = useState([]);
 
   const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI', 'Surgery'];
   const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
 
   useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_PHARMACY_API_URL}`); 
+        const data = await res.json();
+        setInventory(data);
+      } catch (err) {
+        console.error('Failed to fetch inventory');
+      }
+    };
+
     const fetchPatients = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`);
+        const res = await fetch(`${process.env.REACT_APP_PATIENT_API_URL}`); //change when grant access
         const data = await res.json();
         setPatients(data);
       } catch (err) {
@@ -28,21 +37,52 @@ const AddInvoiceModal = ({ onClose }) => {
       }
     };
 
-    const fetchPrescriptions = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_PRESCRIPTION_API_URL}`);
-        const data = await res.json();
-        setPrescriptions(data.data);
-      } catch (err) {
-        console.error('Failed to fetch prescriptions');
+    fetchInventory();
+    fetchPatients();
+  }, []);
 
+  useEffect(() => {
+    const matched = patients.find(p => p.patientId === patientId);
+    if (matched) {
+      setPatientName(`${matched.firstName} ${matched.lastName}`);
+    } else {
+      setPatientName('');
+    }
+
+    const fetchPrescriptions = async () => {
+      if (!patientId) return;
+      try {
+        const res = await fetch(`https://docsys-app-server.onrender.com/api/prescriptions?patientId=${patientId}`);
+        const data = await res.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          // Assuming data[0] is the latest prescription or use logic to pick the latest if needed
+          const prescription = data[0];
+
+          const newMeds = (prescription.inscription || []).map(item => {
+            const match = inventory.find(i => i.name.toLowerCase() === item.name.toLowerCase());
+            return {
+              name: item.name,
+              quantity: item.quantity,
+              price: match ? match.price : 0,
+              source: 'prescription'  // mark as auto-filled
+            };
+          });
+
+
+          setMedicines(newMeds);
+        } else {
+          setMedicines([]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch prescriptions:', err);
       }
     };
 
-    fetchPatients();
     fetchPrescriptions();
-  }, []);
-  
+  }, [patientId, patients, inventory]);
+
+
   const handleServiceChange = (value, index) => {
     const updated = [...medicalServices];
     updated[index] = value;
@@ -52,26 +92,17 @@ const AddInvoiceModal = ({ onClose }) => {
   const addService = () => setMedicalServices([...medicalServices, '']);
   const removeService = (index) => setMedicalServices(medicalServices.filter((_, i) => i !== index));
 
-  useEffect(() => {
-    const matched = patients.find(p => p.patientId === patientId);
-    if (matched) {
-      setPatientName(`${matched.firstName} ${matched.lastName}`);
-    } else {
-      setPatientName('');
-    }
-    
-    const patientPrescription = prescriptions.find(p => p.patientId === patientId);
-      if (patientPrescription && patientPrescription.inscription.length > 0) {
-        const formattedMeds = patientPrescription.inscription.map(item => ({
-          name: item.name,
-          quantity: item.quantity,
-        }));
-        setMedicines(formattedMeds);
-      } else {
-        setMedicines([]);
-      }
-  }, [patientId, patients, prescriptions]);
+  // const handleMedicineChange = (index, field, value) => {
+  //   const updated = [...medicines];
+  //   updated[index][field] = value;
 
+  //   if (field === 'name') {
+  //     const match = inventory.find(m => m.name.toLowerCase() === value.toLowerCase());
+  //     updated[index].price = match ? match.price : 0;
+  //   }
+
+  //   setMedicines(updated);
+  // };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -100,7 +131,7 @@ const AddInvoiceModal = ({ onClose }) => {
       onClose();
       window.location.reload();
     } catch (err) {
-      alert('Failed to submit invoice:', err.stack || err);
+      alert('Failed to submit invoice');
       console.error(err);
     }
   };
@@ -171,25 +202,22 @@ const AddInvoiceModal = ({ onClose }) => {
           </section>
 
           <section>
-            <h4><FaPills className="section-icon" /> Prescribed Medicines</h4>
-            {prescriptions
-              .filter(p => p.patientId === patientId)
-              .flatMap((prescription) =>
-                prescription.inscription.map((med, idx) => (
-                  <div className="input-row" key={`${prescription._id}-${idx}`}>
-                    <div className="med-name">
-                      <label>Medicine</label>
-                      <input type="text" value={med.name} readOnly />
-                    </div>
-                    <div className="quantity">
-                      <label>Qty</label>
-                      <input type="number" value={med.quantity} readOnly />
-                    </div>
-                  </div>
-                ))
-              )}
-          </section>
+            <h4><FaPills className="section-icon" /> Medicine</h4>
 
+            {medicines.map((med, idx) => (
+              <div className="input-row" key={idx}>
+                <div className="med-name">
+                  <label>Name</label>
+                  <input type="text" value={med.name} readOnly />
+                </div>
+                <div className="quantity">
+                  <label>Qty</label>
+                  <input type="number" value={med.quantity} readOnly />
+                </div>
+              </div>
+            ))}
+
+          </section>
 
           <div className="modal-actions">
             <button type="submit" className="submit-btn">Submit Invoice</button>
