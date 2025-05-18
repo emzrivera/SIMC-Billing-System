@@ -10,6 +10,7 @@ const AddInvoiceModal = ({ onClose }) => {
   const [medicalServices, setMedicalServices] = useState(['']);
   const [roomCharge, setRoomCharge] = useState({ type: '', days: 0 });
   const [prescriptions, setPrescriptions] = useState([]);
+  const [medicines, setMedicines] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
 
