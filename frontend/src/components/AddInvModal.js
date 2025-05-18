@@ -9,7 +9,7 @@ const AddInvoiceModal = ({ onClose }) => {
   const [patientName, setPatientName] = useState('');
   const [medicalServices, setMedicalServices] = useState(['']);
   const [roomCharge, setRoomCharge] = useState({ type: '', days: 0 });
-  const [medicines, setMedicines] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
 
@@ -36,51 +36,46 @@ const AddInvoiceModal = ({ onClose }) => {
         console.error('Failed to fetch patients');
       }
     };
+    const fetchPrescriptions = async () => {
+      try {
+        const res = await fetch('https://docsys-app-server.onrender.com/api/prescriptions');
+        const data = await res.json();
+        setPrescriptions(data);
+      } catch (err) {
+        console.error('Failed to fetch prescriptions');
+      }
+    };
 
+    fetchPrescriptions();
     fetchInventory();
     fetchPatients();
   }, []);
 
   useEffect(() => {
-    const matched = patients.find(p => p.patientId === patientId);
-    if (matched) {
-      setPatientName(`${matched.firstName} ${matched.lastName}`);
+    const matchedPatient = patients.find(p => p.patientId === patientId);
+    if (matchedPatient) {
+      setPatientName(`${matchedPatient.firstName} ${matchedPatient.lastName}`);
+
+      const prescription = prescriptions.find(p => p.patientId === patientId);
+      if (prescription && Array.isArray(prescription.inscription)) {
+        const formattedMeds = prescription.inscription.map(med => {
+          const match = inventory.find(item => item.name.toLowerCase() === med.name.toLowerCase());
+          return {
+            name: med.name,
+            quantity: med.quantity,
+            price: match ? match.price : 0
+          };
+        });
+        setMedicines(formattedMeds);
+      } else {
+        setMedicines([]); // Clear if no prescription
+      }
     } else {
       setPatientName('');
+      setMedicines([]);
     }
+  }, [patientId, patients, prescriptions, inventory]);
 
-    const fetchPrescriptions = async () => {
-      if (!patientId) return;
-      try {
-        const res = await fetch(`https://docsys-app-server.onrender.com/api/prescriptions?patientId=${patientId}`);
-        const data = await res.json();
-
-        if (Array.isArray(data) && data.length > 0) {
-          // Assuming data[0] is the latest prescription or use logic to pick the latest if needed
-          const prescription = data[0];
-
-          const newMeds = (prescription.inscription || []).map(item => {
-            const match = inventory.find(i => i.name.toLowerCase() === item.name.toLowerCase());
-            return {
-              name: item.name,
-              quantity: item.quantity,
-              price: match ? match.price : 0,
-              source: 'prescription'  // mark as auto-filled
-            };
-          });
-
-
-          setMedicines(newMeds);
-        } else {
-          setMedicines([]);
-        }
-      } catch (err) {
-        console.error('Failed to fetch prescriptions:', err);
-      }
-    };
-
-    fetchPrescriptions();
-  }, [patientId, patients, inventory]);
 
 
   const handleServiceChange = (value, index) => {
@@ -216,6 +211,7 @@ const AddInvoiceModal = ({ onClose }) => {
                 </div>
               </div>
             ))}
+
 
           </section>
 
