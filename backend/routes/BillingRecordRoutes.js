@@ -51,6 +51,13 @@ router.post('/', async (req, res) => {
     const inventoryRes = await fetch(`${process.env.PHARMACY_API_URL}`);
     const inventory = await inventoryRes.json();
 
+    // fetch healthcards 
+    const hmoRes = await fetch('https://hmo-queue.onrender.com/health-cards/patients');
+    const hmoData = await hmoRes.json();
+    const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
+    const hmoProvider = hmoEntry?.healthCardName || 'None';
+    const hmoPercentage = hmoEntry?.discount || 0;
+
     // service total calculation
     const formattedServices = (medicalServices || []).map(service => {
       const key = service.toLowerCase().trim();
@@ -83,7 +90,8 @@ router.post('/', async (req, res) => {
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-    const balanceDue = totalAmount - discountAmount;
+    const hmoDiscountAmount = totalAmount * (hmoPercentage / 100);
+    const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -104,9 +112,15 @@ router.post('/', async (req, res) => {
       amountPaid: 0,
       balanceDue,
       status: 'Unpaid',
+      hmoInfo: hmoProvider === 'None' ? [] : [{
+        provider: hmoProvider,
+        percentage: hmoPercentage,
+        discount: hmoDiscountAmount
+      }],
       invoiceDate: new Date()
     });
 
+    console.log('Record to be saved:', record);
     await record.save();
     res.status(201).json({ message: 'Invoice created successfully', invoiceId });
   } catch (err) {
