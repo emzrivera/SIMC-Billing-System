@@ -205,19 +205,22 @@ const AddInvoiceModal = ({ onClose }) => {
             <h4><FaPills className="section-icon" /> Prescribed Medicines</h4>
             {prescriptions
               .filter(p => p.patientId === patientId)
-              .map((prescription, idx) => (
-                <div className="input-row" key={idx}>
-                  <div className="med-name">
-                    <label>Medicine</label>
-                    <input type="text" value={prescription.name} readOnly />
+              .flatMap((prescription) =>
+                prescription.inscription.map((item, idx) => (
+                  <div className="input-row" key={`${prescription._id}-${idx}`}>
+                    <div className="med-name">
+                      <label>Medicine</label>
+                      <input type="text" value={item.name} readOnly />
+                    </div>
+                    <div className="quantity">
+                      <label>Qty</label>
+                      <input type="number" value={item.quantity} readOnly />
+                    </div>
                   </div>
-                  <div className="quantity">
-                    <label>Qty</label>
-                    <input type="number" value={prescription.quantity} readOnly />
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
           </section>
+
 
           <div className="modal-actions">
             <button type="submit" className="submit-btn">Submit Invoice</button>
