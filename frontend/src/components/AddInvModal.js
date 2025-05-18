@@ -12,6 +12,7 @@ const AddInvoiceModal = ({ onClose }) => {
   const [medicines, setMedicines] = useState([{ name: '', quantity: 1, price: 0 }]);
   const [inventory, setInventory] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
 
   const serviceOptions = ['Consultation', 'X-Ray', 'Blood Test', 'MRI', 'Surgery'];
   const roomOptions = ['VIP', 'Private Room', 'Semi-Private', 'Ward'];
