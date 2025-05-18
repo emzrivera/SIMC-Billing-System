@@ -53,18 +53,21 @@ router.post('/', async (req, res) => {
       medicines
     } = req.body;
 
-    // fetch patient name from PRMS
-    const patientRes = await fetch(`${process.env.PATIENT_API_URL}`);
+    const patientRes = await fetch(process.env.PATIENT_API_URL);
     const patients = await patientRes.json();
     const patient = patients.find(p => p.patientId === patientId);
     const patientName = patient ? `${patient.firstName} ${patient.lastName}` : 'Unknown';
-    const patientDiscount = patient?.status || 'Regular';
+    const patientStatus = patient?.status || 'Regular';
 
-    // fetch pharmacy inventory
-    const inventoryRes = await fetch(`${process.env.PHARMACY_API_URL}`);
+    const inventoryRes = await fetch(process.env.PHARMACY_API_URL);
     const inventory = await inventoryRes.json();
 
-    // service total calculation
+    const hmoRes = await fetch('https://hmo-queue.onrender.com/health-cards/patients');
+    const hmoData = await hmoRes.json();
+    const hmoEntry = hmoData.data.find(card => card.patientId === patientId);
+    const hmoProvider = hmoEntry?.healthCardName || 'None';
+    const hmoPercentage = hmoEntry?.discount || 0;
+
     const formattedServices = (medicalServices || []).map(service => {
       const key = service.toLowerCase().trim();
       const price = servicePriceMap[key] || 0;
@@ -72,12 +75,9 @@ router.post('/', async (req, res) => {
     });
 
     const serviceTotal = formattedServices.reduce((sum, s) => sum + s.price, 0);
-
-    // room total calculation
     const roomRate = roomRateMap[roomType?.toLowerCase().trim()] || 0;
     const roomTotal = roomRate * (noOfDays || 0);
 
-    // medicine total calculation
     let medicineTotal = 0;
     const formattedMeds = (medicines || []).map(med => {
       const found = inventory.find(m => m.name.toLowerCase() === med.name.toLowerCase().trim());
@@ -93,12 +93,11 @@ router.post('/', async (req, res) => {
     });
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
-    const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-    const balanceDue = totalAmount - discountAmount;
+    const hmoDiscountAmount = totalAmount * (hmoPercentage / 100);
+    const balanceDue = totalAmount - discountAmount - hmoDiscountAmount;
 
-    // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
     const invoiceId = `INV-${String(counter).padStart(4, '0')}`;
 
@@ -106,7 +105,7 @@ router.post('/', async (req, res) => {
       invoiceId,
       patientId,
       patientName,
-      patientDiscount,
+      patientDiscount: patientStatus,
       medicalServices: formattedServices,
       roomType,
       roomRate,
@@ -117,6 +116,11 @@ router.post('/', async (req, res) => {
       amountPaid: 0,
       balanceDue,
       status: 'Unpaid',
+      hmoInfo: hmoProvider === 'None' ? [] : [{
+        provider: hmoProvider,
+        percentage: hmoPercentage,
+        discount: hmoDiscountAmount
+      }],
       invoiceDate: new Date()
     });
 
@@ -127,6 +131,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Server error during invoice creation' });
   }
 });
+
 
 router.get('/:invoiceId', async (req, res) => {
   try {

@@ -67,6 +67,8 @@ const InvoiceDetails = () => {
   const totalAmount = invoice?.totalAmount || 0;
   const discountAmount = invoice?.discountAmount || 0;
   const balanceDue = invoice?.balanceDue || 0;
+  const hmo = invoice?.hmoInfo?.[0];
+
 
   return (
     <div className="invoice-details-page">
@@ -175,6 +177,13 @@ const InvoiceDetails = () => {
                 <div className="summary-row">
                   <span> Discount <span className="badge">{invoice?.patientDiscount || 'None'}</span> </span>
                   <span>– ₱{discountAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                </div>
+              )}
+
+              {hmo && (
+                <div className="summary-row">
+                  <span> Health Card <span className="badge">{hmo.provider} ({hmo.percentage}%)</span> </span>
+                  <span>– ₱{hmo.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
 
