@@ -167,7 +167,7 @@ router.get('/:invoiceId', async (req, res) => {
 
 router.patch('/:invoiceId', async (req, res) => {
   try {
-    const updatedInvoice = await BillingRecord.findByIdAndUpdate(
+    const updatedInvoice = await BillingRecord.findOneAndUpdate(
       { invoiceId: req.params.invoiceId },
       { status: req.body.status },
       { new: true }
