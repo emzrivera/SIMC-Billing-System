@@ -88,19 +88,18 @@ router.post('/', async (req, res) => {
     const discountAmount = totalAmount * discountRate;
     const afterPatientDiscount = totalAmount - discountAmount;
 
-    let hmoDiscount = 0;
+
     let hmoInfo = null;
 
     if (frontendHmoInfo?.provider && frontendHmoInfo?.percentage) {
-      hmoDiscount = afterPatientDiscount * (frontendHmoInfo.percentage / 100);
       hmoInfo = {
         provider: frontendHmoInfo.provider,
         percentage: frontendHmoInfo.percentage,
-        discount: hmoDiscount
+        discount: frontendHmoInfo.discount
       };
     }
 
-    const balanceDue = afterPatientDiscount - discountAmount;
+    const balanceDue = afterPatientDiscount - hmoInfo.discount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -116,7 +115,7 @@ router.post('/', async (req, res) => {
       noOfDays,
       medicines: formattedMeds,
       patientDiscount,
-      hmoInfo,  // Store HMO info here
+      hmoInfo: hmoInfo,
       totalAmount,
       discountAmount,
       amountPaid: 0,
