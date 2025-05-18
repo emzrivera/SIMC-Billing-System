@@ -37,7 +37,8 @@ router.post('/', async (req, res) => {
       roomType,
       noOfDays,
       medicalServices,
-      medicines
+      medicines,
+      hmoInfo: frontendHmoInfo
     } = req.body;
 
     // fetch patient name from PRMS
@@ -80,10 +81,26 @@ router.post('/', async (req, res) => {
     });
 
     const totalAmount = serviceTotal + roomTotal + medicineTotal;
+
     const patientStatus = patient?.status || 'Regular';
     const discountRate = (patientStatus === 'Senior' || patientStatus === 'PWD') ? 0.20 : 0;
     const discountAmount = totalAmount * discountRate;
-    const balanceDue = totalAmount - discountAmount;
+    const afterPatientDiscount = totalAmount - discountAmount;
+
+    let hmoDiscount = 0;
+    let hmoInfo = null;
+
+    if (frontendHmoInfo?.provider && frontendHmoInfo?.percentage) {
+      hmoDiscount = afterPatientDiscount * (frontendHmoInfo.percentage / 100);
+      hmoInfo = {
+        provider: frontendHmoInfo.provider,
+        percentage: frontendHmoInfo.percentage,
+        discount: hmoDiscount
+      };
+    }
+
+
+    const balanceDue = afterPatientDiscount - discountAmount;
 
     // generate invoice id
     const counter = await BillingRecord.countDocuments(); 
@@ -93,12 +110,13 @@ router.post('/', async (req, res) => {
       invoiceId,
       patientId,
       patientName,
-      patientDiscount,
       medicalServices: formattedServices,
       roomType,
       roomRate,
       noOfDays,
       medicines: formattedMeds,
+      patientDiscount,
+      hmoInfo,
       totalAmount,
       discountAmount,
       amountPaid: 0,

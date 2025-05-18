@@ -39,6 +39,32 @@ const InvoiceDetails = () => {
     fetchInvoice();
   }, [id]);
 
+  useEffect(() => {
+    const fetchHmoInfo = async () => {
+      if (!invoice?.patientId) return;
+
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/hmo/${invoice.patientId}`);
+        const hmo = await res.json();
+
+        if (hmo?.discount) {
+          const afterPatientDiscount = (invoice.totalAmount || 0) - (invoice.discountAmount || 0);
+          const discount = afterPatientDiscount * (hmo.discount / 100);
+
+          setHmoInfo({
+            provider: hmo.name,
+            percentage: hmo.discount,
+            discount
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching HMO info:', err);
+      }
+    };
+
+    fetchHmoInfo();
+  }, [invoice]);
+
   const SECTION_CONFIG = [
     { key: "medical", label: "Medical Services", icon: <FaStethoscope className="section-icon" /> },
     { key: "room", label: "Room Charge", icon: <FaBed className="section-icon" /> },
@@ -66,9 +92,9 @@ const InvoiceDetails = () => {
 
   const totalAmount = invoice?.totalAmount || 0;
   const discountAmount = invoice?.discountAmount || 0;
-  const balanceDue = invoice?.balanceDue || 0;
-  const hmo = invoice?.hmoInfo?.[0];
-
+  const afterPatientDiscount = total - seniorOrPwdDiscount;
+  const hmoDiscount = hmoInfo?.discount || 0;
+  const balanceDue = afterPatientDiscount - hmoDiscount - (invoice?.amountPaid || 0);
 
   return (
     <div className="invoice-details-page">
@@ -180,13 +206,13 @@ const InvoiceDetails = () => {
                 </div>
               )}
 
-              {hmo && (
+              {hmoInfo && (
                 <div className="summary-row">
-                  <span> Health Card <span className="badge">{hmo.provider} ({hmo.percentage}%)</span> </span>
-                  <span>– ₱{hmo.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  <span>Health Card <span className="badge">{hmoInfo.provider} ({hmoInfo.percentage}%)</span></span>
+                  <span>– ₱{hmoInfo.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
-
+              
               <div className="summary-row">
                 <span>Amount Paid</span>
                 <span>– ₱{(invoice?.amountPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
