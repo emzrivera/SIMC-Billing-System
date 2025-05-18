@@ -212,7 +212,16 @@ const InvoiceDetails = () => {
 
               {hmoInfo && (
                 <div className="summary-row">
-                  <span>Health Card <span className="badge">{hmoInfo.provider} ({hmoInfo.percentage}%)</span></span>
+                  <span>
+                    Health Card 
+                    <span 
+                      className="badge truncate-tooltip"
+                      title={`${hmoInfo.provider} (${hmoInfo.percentage}%)`}
+                    >
+                      {`${hmoInfo.provider} (${hmoInfo.percentage}%)`}
+                    </span>
+                  </span>
+
                   <span>– ₱{hmoInfo.discount}</span>
                 </div>
               )}

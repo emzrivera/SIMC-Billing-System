@@ -199,6 +199,11 @@ nav p
     background-color: #FF6060;
 }
 
+.unpaid .status-label
+{
+    background-color: #EDAE00;
+}
+
 .amount 
 {
     font-size: 20px;
