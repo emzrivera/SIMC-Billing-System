@@ -18,8 +18,9 @@ const addDays = (dateStr, days) => {
 };
 
 const InvoiceDetails = () => {
-  const { id } = useParams(); // from /invoice/:id
+  const { id } = useParams(); 
   const [invoice, setInvoice] = useState(null);
+  const [hmoInfo, setHmoInfo] = useState([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const openPaymentModal = () => setIsPaymentModalOpen(true);
@@ -212,7 +213,7 @@ const InvoiceDetails = () => {
                   <span>– ₱{hmoInfo.discount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                 </div>
               )}
-              
+
               <div className="summary-row">
                 <span>Amount Paid</span>
                 <span>– ₱{(invoice?.amountPaid || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
