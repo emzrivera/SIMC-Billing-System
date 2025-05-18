@@ -42,9 +42,10 @@ const AddInvoiceModal = ({ onClose }) => {
       try {
         const res = await fetch(`${process.env.REACT_APP_PRESCRIPTION_API_URL}`);
         const data = await res.json();
-        setPrescriptions(data);
+        setPrescriptions(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to fetch prescriptions');
+        setPrescriptions([]); // fallback to empty array
       }
     };
 
@@ -52,16 +53,6 @@ const AddInvoiceModal = ({ onClose }) => {
     fetchPatients();
     fetchPrescriptions();
   }, []);
-
-  useEffect(() => {
-    const matched = patients.find(p => p.patientId === patientId);
-    if (matched) {
-      setPatientName(`${matched.firstName} ${matched.lastName}`);
-    } else {
-      setPatientName('');
-    }
-  }, [patientId, patients]);
-
   
   const handleServiceChange = (value, index) => {
     const updated = [...medicalServices];
