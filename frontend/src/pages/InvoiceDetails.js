@@ -71,6 +71,13 @@ const InvoiceDetails = () => {
 useEffect(() => {
   const updateInvoiceWithHmo = async () => {
     if (!invoice || !hmoInfo?.provider) return;
+    
+    const totalAmount = invoice.totalAmount || 0;
+    const discountAmount = invoice.discountAmount || 0;
+    const afterPatientDiscount = totalAmount - discountAmount;
+    const hmoDiscount = hmoInfo.discount || 0;
+    const amountPaid = invoice.amountPaid || 0;
+    const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
 
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records/${id}`, {
