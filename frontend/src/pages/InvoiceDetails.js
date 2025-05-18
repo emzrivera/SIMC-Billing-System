@@ -108,7 +108,7 @@ const InvoiceDetails = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'void' }),
+        body: JSON.stringify({ status: 'voided' }),
       });
 
       if (res.ok) {
