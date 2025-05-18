@@ -89,8 +89,8 @@ router.post('/', async (req, res) => {
         const hmoData = await hmoRes.json();
         if (hmoData?.provider && hmoData?.percentage) {
           hmoInfo = {
-            provider: hmoData.provider,
-            percentage: hmoData.percentage,
+            provider: hmoData.name,
+            percentage: hmoData.discount,
           };
           hmoDiscount = (totalAmount - discountAmount) * (hmoData.percentage / 100);
         }
