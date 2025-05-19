@@ -179,7 +179,7 @@ router.patch('/:id', async (req, res) => {
     let status = 'Unpaid';
     if (balanceDue <= 0) {
       status = 'Paid';
-    } else if (amountPaid > 0) {
+    } else if (balanceDue < totalAmount) {
       status = 'Partial';
     }
 
