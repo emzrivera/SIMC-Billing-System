@@ -53,7 +53,7 @@ const Billing = () => {
     ? 'Voided'
     : balance === 0
       ? 'Paid'
-      : paid > 0
+      : balance < total
         ? 'Partial'
         : 'Unpaid';
 
