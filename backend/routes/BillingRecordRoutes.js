@@ -123,7 +123,7 @@ router.post('/', async (req, res) => {
       discountAmount,
       amountPaid: 0,
       balanceDue,
-      status,
+      status: 'Unpaid',
       invoiceDate: new Date()
     });
 
