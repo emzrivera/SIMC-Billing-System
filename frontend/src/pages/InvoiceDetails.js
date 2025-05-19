@@ -188,11 +188,16 @@ useEffect(() => {
             <p className="last-paid">Issued at {formatDate(invoice?.invoiceDate)}</p>
           </div>
 
-          <div className="action-buttons">
-            {/* <button className="edit-btn"> < HiOutlinePencil /> Edit</button> */}
-            <button className="void-btn" onClick={handleVoid}> < FaBan /> Void</button>
-            <button className="add-btn" onClick={openPaymentModal}> < FaMoneyBill /> Add Payment</button>
-          </div>
+            {invoice?.status !== 'Voided' && (
+            <div className="action-buttons">
+              <button className="void-btn" onClick={handleVoid}>
+                <FaBan /> Void
+              </button>
+              <button className="add-btn" onClick={openPaymentModal}>
+                <FaMoneyBill /> Add Payment
+              </button>
+            </div>
+          )}
         </div>
 
         <hr className="line-separator" />
