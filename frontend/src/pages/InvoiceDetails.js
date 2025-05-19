@@ -138,11 +138,21 @@ useEffect(() => {
   };
 
   const totalAmount = invoice?.totalAmount || 0;
-  const discountAmount = invoice?.discountAmount || 0;
-  const afterPatientDiscount = totalAmount - discountAmount;
-  const hmoDiscount = hmoInfo?.discount || 0;
-  const balanceDue = afterPatientDiscount - hmoDiscount - (invoice?.amountPaid || 0);
+const discountAmount = invoice?.discountAmount || 0;
+const afterPatientDiscount = totalAmount - discountAmount;
+const hmoDiscount = hmoInfo?.discount || 0;
+const amountPaid = invoice?.amountPaid || 0;
 
+const balanceDue = Math.max(afterPatientDiscount - hmoDiscount - amountPaid, 0);
+
+// Derive status based on balanceDue
+const computedStatus = invoice?.status === 'Voided'
+  ? 'Voided'
+  : balanceDue === 0
+    ? 'Paid'
+    : balanceDue < totalAmount
+      ? 'Partially Paid'
+      : 'Unpaid';
 
   const handleVoid = async () => {
     try {
@@ -183,21 +193,18 @@ useEffect(() => {
           <div>
             <div className="header-right">
               <h1>{invoice?.invoiceId || 'Loading...'}</h1>
-              <span className={`status-${(invoice?.status || '').toLowerCase()}`}>{invoice?.status}</span>
+              <span className={`status-${computedStatus.toLowerCase()}`}>
+                {computedStatus}
+              </span>
             </div>
             <p className="last-paid">Issued at {formatDate(invoice?.invoiceDate)}</p>
           </div>
 
-            {invoice?.status !== 'Voided' && (
-            <div className="action-buttons">
-              <button className="void-btn" onClick={handleVoid}>
-                <FaBan /> Void
-              </button>
-              <button className="add-btn" onClick={openPaymentModal}>
-                <FaMoneyBill /> Add Payment
-              </button>
-            </div>
-          )}
+          <div className="action-buttons">
+            {/* <button className="edit-btn"> < HiOutlinePencil /> Edit</button> */}
+            <button className="void-btn" onClick={handleVoid}> < FaBan /> Void</button>
+            <button className="add-btn" onClick={openPaymentModal}> < FaMoneyBill /> Add Payment</button>
+          </div>
         </div>
 
         <hr className="line-separator" />
@@ -281,7 +288,7 @@ useEffect(() => {
                 </div>
               )}
 
-              {hmoInfo && (
+              {hmoInfo && hmoInfo.provider && (
                 <div className="summary-row">
                   <span>
                     Health Card 
