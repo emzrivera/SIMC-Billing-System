@@ -299,11 +299,8 @@ th, td
     background-color: transparent; /* Makes sure no white shows */
 }   
 
-th{
-    font-size: 12px;
-}
 
-td{
+th, td{
     font-size: 14px;
 }
 
