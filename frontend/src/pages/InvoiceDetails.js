@@ -151,7 +151,7 @@ const computedStatus = invoice?.status === 'Voided'
   : balanceDue === 0
     ? 'Paid'
     : balanceDue < totalAmount
-      ? 'Partially Paid'
+      ? 'Partial'
       : 'Unpaid';
 
   const handleVoid = async () => {
