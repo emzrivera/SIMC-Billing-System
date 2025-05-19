@@ -299,6 +299,14 @@ th, td
     background-color: transparent; /* Makes sure no white shows */
 }   
 
+th{
+    font-size: 12px;
+}
+
+td{
+    font-size: 14px;
+}
+
 .history-table-voided,
 .history-table-partial,
 .history-table-paid 
