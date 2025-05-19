@@ -4,7 +4,7 @@ import './Billing.css';
 import AddInvoiceModal from '../components/AddInvModal';
 
 import { ReactComponent as AddIcon } from '../assets/add-icon.svg';
-import {  HiOutlineArrowRight, HiOutlineSearch  } from 'react-icons/hi';
+import {  HiOutlineArrowNarrowRight , HiOutlineSearch  } from 'react-icons/hi';
 
 
 const Billing = () => {
@@ -200,7 +200,7 @@ const Billing = () => {
                     <td>{invoice.date}</td>
                     <td className="icon-cell">
                       <NavLink to={`/invoice/${invoice.id}`} style={{ display: 'inline-flex', alignItems: 'center'}}>
-                        <HiOutlineArrowRight size={20} color="#555" />
+                        <HiOutlineArrowNarrowRight size={20} color="#555" />
                       </NavLink>
                     </td>
                   </tr>
