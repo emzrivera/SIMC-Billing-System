@@ -166,33 +166,38 @@ router.patch('/:invoiceId', async (req, res) => {
 // PATCH route to update invoice
 router.patch('/:id', async (req, res) => {
   try {
-    const { hmoInfo, discountAmount, totalAmount, amountPaid } = req.body;
-    
-    // Log the received data to check if it's correct
-    console.log('PATCH Request Body:', req.body);
+    const { hmoInfo, discountAmount, amountPaid } = req.body;
 
-    // Calculate HMO discount and new balanceDue here
-    const afterPatientDiscount = totalAmount - discountAmount;
-    const hmoDiscount = hmoInfo?.discount || 0;
-    const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
+    const invoice = await BillingRecord.findById(req.params.id);
+
+    if (!invoice) {
+      return res.status(404).json({ message: 'Invoice not found' });
+    }
+
+    // Use existing totalAmount if not sent in request
+    const total = invoice.totalAmount;
+    const discount = discountAmount ?? invoice.discountAmount ?? 0;
+    const paid = amountPaid ?? invoice.amountPaid ?? 0;
+    const hmoDiscount = hmoInfo?.discount ?? invoice.hmoInfo?.discount ?? 0;
+
+    const afterPatientDiscount = total - discount;
+    const balanceDue = afterPatientDiscount - hmoDiscount - paid;
 
     let status = 'Unpaid';
     if (balanceDue <= 0) {
       status = 'Paid';
-    } else if (balanceDue < totalAmount) {
+    } else if (balanceDue < total) {
       status = 'Partial';
     }
-
     // Update the record with the new balanceDue and hmoInfo
     const updatedInvoice = await BillingRecord.findOneAndUpdate(
       { invoiceId: req.params.invoiceId },
       {
         $set: {
-          hmoInfo,
-          totalAmount,
-          discountAmount,
-          amountPaid,
-          balanceDue: newBalanceDue,
+          ...(hmoInfo && { hmoInfo }),
+          discountAmount: discount,
+          amountPaid: paid,
+          balanceDue,
           status
         }
       },
