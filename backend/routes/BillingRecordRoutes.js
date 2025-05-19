@@ -123,7 +123,7 @@ router.post('/', async (req, res) => {
       discountAmount,
       amountPaid: 0,
       balanceDue,
-      status: 'Unpaid',
+      status,
       invoiceDate: new Date()
     });
 
@@ -176,13 +176,24 @@ router.patch('/:id', async (req, res) => {
     const hmoDiscount = hmoInfo?.discount || 0;
     const newBalanceDue = afterPatientDiscount - hmoDiscount - amountPaid;
 
+    let status = 'Unpaid';
+    if (balanceDue <= 0) {
+      status = 'Paid';
+    } else if (amountPaid > 0) {
+      status = 'Partial';
+    }
+
     // Update the record with the new balanceDue and hmoInfo
     const updatedInvoice = await BillingRecord.findOneAndUpdate(
       { invoiceId: req.params.invoiceId },
       {
         $set: {
           hmoInfo,
-          balanceDue: newBalanceDue // Store the calculated balance due
+          totalAmount,
+          discountAmount,
+          amountPaid,
+          balanceDue: newBalanceDue,
+          status
         }
       },
       { new: true }
