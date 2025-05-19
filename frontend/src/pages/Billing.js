@@ -39,26 +39,39 @@ const Billing = () => {
         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/billing-records`);
         const records = await res.json();
         const fetched = records.map((record, index) => {
-          const total = record.totalAmount ?? 0;
-          const paid = record.amountPaid ?? 0;
-          const balance = record.balanceDue ?? 0;
-          const invoiceId = record.invoiceId || `INV-${String(index + 1).padStart(4, '0')}`;  
-  
-          return {
-            id: invoiceId,
-            name: record.patientName || 'Unknown',
-            patientId: record.patientId || 'Unknown',
-            total,
-            paid,
-            balance,
-            status: record.status || 'Unpaid',
-            date: record.invoiceDate
-              ? new Date(record.invoiceDate).toLocaleDateString('en-US', {
-                  month: 'short', day: 'numeric', year: 'numeric'
-                })
-              : 'Unknown'
-          };
-        });
+  const total = record.totalAmount ?? 0;
+  const patientDiscount = record.discountAmount ?? 0;
+  const hmoDiscount = record.hmoInfo?.discount ?? 0;
+  const paid = record.amountPaid ?? 0;
+
+  const afterPatientDiscount = total - patientDiscount;
+  const balance = Math.max(afterPatientDiscount - hmoDiscount - paid, 0);
+
+  const invoiceId = record.invoiceId || `INV-${String(index + 1).padStart(4, '0')}`;
+
+  const status = record.status === 'Voided'
+    ? 'Voided'
+    : balance === 0
+      ? 'Paid'
+      : paid > 0
+        ? 'Partial'
+        : 'Unpaid';
+
+  return {
+    id: invoiceId,
+    name: record.patientName || 'Unknown',
+    patientId: record.patientId || 'Unknown',
+    total,
+    paid,
+    balance,
+    status,
+    date: record.invoiceDate
+      ? new Date(record.invoiceDate).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        })
+      : 'Unknown'
+  };
+});
   
         setInvoices(fetched);
 
